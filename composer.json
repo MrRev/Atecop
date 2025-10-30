@@ -1,0 +1,18 @@
+{
+  "name": "atecop/sistema-gestion",
+  "description": "Sistema de gestión interna para ATECOP",
+  "type": "project",
+  "require": {
+    "php": ">=8.0",
+    "setasign/fpdf": "^1.8",
+    "phpoffice/phpspreadsheet": "^1.29"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "modulos/"
+    }
+  },
+  "config": {
+    "optimize-autoloader": true
+  }
+}
