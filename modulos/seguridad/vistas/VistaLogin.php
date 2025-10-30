@@ -1,14 +1,10 @@
 <?php
 require_once dirname(__DIR__, 3) . '/config/config.php';
 
-// Comprobar si la sesión NO está iniciada antes de llamar a session_start()
 if (session_status() == PHP_SESSION_NONE) {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    session_start();
 }
 
-// Si ya está logueado, redirigir al dashboard
 if (isset($_SESSION['idadmin'])) {
     header('Location: ' . BASE_URL . '/index.php?modulo=dashboard');
     exit;
@@ -20,116 +16,258 @@ if (isset($_SESSION['idadmin'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - <?php echo APP_NAME; ?></title>
-    <link rel="stylesheet" href="<?php echo CSS_URL; ?>/bootstrap.css">
-    <style>
-        body {
-            background: linear-gradient(135deg, #002e5d 0%, #3bafda 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-        }
-        .login-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-        }
-        .login-logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .login-logo img {
-            max-width: 80px;
-            height: auto;
-        }
-        .login-title {
-            text-align: center;
-            color: #002e5d;
-            margin-bottom: 10px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .login-subtitle {
-            text-align: center;
-            color: #707070;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        .form-group label {
-            color: #002e5d;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        .form-control {
-            border: 1px solid #ddd;
-            padding: 10px 15px;
-            font-size: 14px;
-        }
-        .form-control:focus {
-            border-color: #3bafda;
-            box-shadow: 0 0 0 0.2rem rgba(59, 175, 218, 0.25);
-        }
-        .btn-login {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 20px;
-        }
-        .alert {
-            margin-bottom: 20px;
-        }
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 12px;
-            color: #707070;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/Login.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    color: 
+    #fff;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #fff;
+}
+
+.container {
+    position: relative;
+    width: 750px;
+    height: 450px;
+    border: 2px solid #002E5D;
+    box-shadow: 0 0 25px #002E5D;
+    overflow: hidden;
+}
+
+.container .Form-box {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.Form-box.Login {
+    left: 0;
+    padding: 0 40px;
+}
+
+.Form-box h2 {
+    font-size: 32px;
+    text-align: center;
+    color: #002E5D;
+}
+
+.Form-box .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin-top: 25px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: #002E5D;
+    font-weight: 600;
+    border-bottom: 2px solid #002E5D;
+    padding: 23px;
+    transition: .5s;
+}
+
+.input-box input:focus,
+.input-box input:valid {
+    border-bottom: 2px solid #002E5D;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #002E5D;
+    transition: .5s;
+}
+
+.input-box input:focus ~ label,
+.input-box input:valid ~ label {
+    top: -5px;
+    color: #002E5D;
+}
+
+.input-box i {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    font-size: 18px;
+    transform: translateY(-50%);
+    transition: .5s;
+    color: #000;
+}
+
+.input-box input:focus ~ i,
+.input-box input:valid ~ i {
+    color: #002E5D;
+}
+
+.btn {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    background: transparent;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    border: 2px solid #002E5D;
+    overflow: hidden;
+    z-index: 1;
+    color: #002E5D;
+}
+
+.btn::before {
+    content: "";
+    position: absolute;
+    height: 300%;
+    width: 100%;
+    background: linear-gradient(#25252b, #002E5D, #25252b, #002E5D);
+    top: -100%;
+    left: 0;
+    z-index: 0;
+    transition: .5s;
+}
+
+.btn:hover::before {
+    top: 0;
+}
+
+.btn span {
+    position: relative;
+    z-index: 2; /* Texto visible por encima del fondo animado */
+}
+
+.regi-link {
+    margin-top: 14px;
+    text-align: center;
+    margin: 20px 0 10px;
+}
+
+.regi-link a{
+    text-decoration: none;
+    color: #002E5D;
+    font-weight: 600;
+}
+
+.regi-link a:hover{
+    text-decoration: underline;
+}
+
+.info-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  
+    align-items: flex-end;     
+    text-align: right;     
+    padding: 0 60px;          
+    z-index: 2;               
+    background: transparent;  
+}
+
+.info-content {
+    right: 0;
+    text-align: right;
+    padding: 0 40px 60px 150px; 
+}
+
+.info-content h2 {
+    text-transform: uppercase;
+    font-size: 36px;
+    line-height: 1.3;
+    margin-bottom: 10px;
+}
+
+.info-content p {
+    font-size: 16px;
+    max-width: 320px;
+}
+
+
+.container .curved-shape{
+    position: absolute;
+    right: 0;
+    top: -5px;
+    height: 600px;
+    width: 850px;
+    background: linear-gradient(45deg,#25252b,#002E5D);
+    transform: rotate(10deg) skewY(40deg);
+    transform-origin: bottom right;
+}
+</style>
+
 <body>
-    <div class="login-container">
-        <div class="login-card">
-            <div class="login-logo">
-                <img src="<?php echo IMG_URL; ?>/logo-atecop.png" alt="ATECOP Logo">
-            </div>
-            
-            <h1 class="login-title">ATECOP</h1>
-            <p class="login-subtitle">Sistema de Gestión</p>
-            
+    <div class="container">
+        <div class="curved-shape"></div>
+
+        <div class="Form-box Login">
+            <h2>Login</h2>
+
             <?php if (isset($_SESSION['error_login'])): ?>
-                <div class="alert alert-danger" role="alert">
+                <div class="regi-link" style="color: red; text-align: center; margin-bottom: 15px;">
                     <?php 
-                    echo htmlspecialchars($_SESSION['error_login']); 
-                    unset($_SESSION['error_login']);
+                        echo htmlspecialchars($_SESSION['error_login']); 
+                        unset($_SESSION['error_login']);
                     ?>
                 </div>
             <?php endif; ?>
-            
-            <form action="<?php echo BASE_URL; ?>/index.php?modulo=seguridad&accion=procesarLogin" method="POST" id="formLogin">
-                <div class="form-group">
-                    <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" name="usuario" class="form-control" required autofocus placeholder="Ingrese su usuario">
+
+            <form action="<?php echo BASE_URL; ?>/index.php?modulo=seguridad&accion=procesarLogin" method="POST">
+                <div class="input-box">
+                    <input type="text" name="usuario" required>
+                    <label>Usuario</label>
+                    <i class='bx bxs-user'></i>
                 </div>
-                
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" class="form-control" required placeholder="Ingrese su contraseña">
+
+                <div class="input-box">
+                    <input type="password" name="password" required>
+                    <label>Contraseña</label>
+                    <i class='bx bxs-lock-alt'></i>
                 </div>
-                
-                <button type="submit" class="btn btn-primary btn-login">Iniciar Sesión</button>
+
+                <div class="input-box">
+                    <button class="btn" type="submit"><span>Login</span></button>
+                </div>
+
+                <div class="regi-link">
+                    <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+                </div>
             </form>
-            
-            <div class="login-footer">
-                <p>&copy; <?php echo date('Y'); ?> ATECOP - Todos los derechos reservados</p>
-                <p>Versión <?php echo APP_VERSION; ?></p>
-            </div>
+        </div>
+
+        <div class="info-content">
+            <h2>¡Bienvenido!</h2>
+            <p>Accede al panel de gestión para crear, editar y supervisar usuarios fácilmente.</p>
         </div>
     </div>
 </body>

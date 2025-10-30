@@ -1,5 +1,92 @@
 <?php require_once __DIR__ . '/../../layouts/header.php'; ?>
 
+<style>
+/* Contenedor principal del dashboard */
+.dashboard-container {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    background-color: #f5f6fa;
+    min-height: 100vh;
+}
+
+/* Cabecera */
+.dashboard-header h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #002E5D;
+}
+
+.dashboard-header p {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+/* Grid de tarjetas */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Tarjetas */
+.dashboard-card {
+    display: flex;
+    align-items: flex-start;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* Icono de la tarjeta */
+.card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+/* Contenido de la tarjeta */
+.card-content h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    color: #002E5D;
+}
+
+.card-content p {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Botón */
+.btn.btn-secondary {
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    background-color: #3BAFDA;
+    color: #fff;
+    border-radius: 8px;
+    transition: background-color 0.2s;
+}
+
+.btn.btn-secondary:hover {
+    background-color: #2a8acb;
+}
+</style>
+
 <div class="dashboard-container">
     <div class="dashboard-header">
         <h1>Panel de Control</h1>
