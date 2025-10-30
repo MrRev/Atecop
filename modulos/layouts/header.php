@@ -13,7 +13,12 @@ if (!isset($_SESSION['idadmin'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle ?? 'Dashboard'; ?> - <?php echo APP_NAME; ?></title>
-    <link rel="stylesheet" href="<?php echo CSS_URL; ?>/bootstrap.css">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/bootstrap.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/estilos.css">
+    <!-- Scripts -->
+    <script src="<?php echo BASE_URL; ?>/public/js/scripts.js" defer></script>
+    <script src="<?php echo BASE_URL; ?>/public/js/validaciones.js" defer></script>
     <style>
         body {
             display: flex;

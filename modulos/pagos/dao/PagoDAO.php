@@ -17,19 +17,31 @@ class PagoDAO {
     /**
      * Crear un nuevo pago
      */
-    public function create(Pago $pago): bool {
+    public function create($datos): bool {
         try {
             $sql = "INSERT INTO pago (monto, fechapago, concepto, urlcomprobante, estado, idsocio, idmetodopago) 
                     VALUES (:monto, :fechapago, :concepto, :urlcomprobante, :estado, :idsocio, :idmetodopago)";
             
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindValue(':monto', $pago->getMonto());
-            $stmt->bindValue(':fechapago', $pago->getFechapago());
-            $stmt->bindValue(':concepto', $pago->getConcepto());
-            $stmt->bindValue(':urlcomprobante', $pago->getUrlcomprobante());
-            $stmt->bindValue(':estado', $pago->getEstado());
-            $stmt->bindValue(':idsocio', $pago->getIdsocio(), PDO::PARAM_INT);
-            $stmt->bindValue(':idmetodopago', $pago->getIdmetodopago(), PDO::PARAM_INT);
+            
+            // Acepta tanto objeto Pago como array
+            if ($datos instanceof Pago) {
+                $stmt->bindValue(':monto', $datos->getMonto());
+                $stmt->bindValue(':fechapago', $datos->getFechapago());
+                $stmt->bindValue(':concepto', $datos->getConcepto());
+                $stmt->bindValue(':urlcomprobante', $datos->getUrlcomprobante());
+                $stmt->bindValue(':estado', $datos->getEstado());
+                $stmt->bindValue(':idsocio', $datos->getIdsocio());
+                $stmt->bindValue(':idmetodopago', $datos->getIdmetodopago());
+            } else {
+                $stmt->bindValue(':monto', $datos['monto']);
+                $stmt->bindValue(':fechapago', $datos['fechapago']);
+                $stmt->bindValue(':concepto', $datos['concepto']);
+                $stmt->bindValue(':urlcomprobante', $datos['urlcomprobante']);
+                $stmt->bindValue(':estado', $datos['estado']);
+                $stmt->bindValue(':idsocio', $datos['idsocio']);
+                $stmt->bindValue(':idmetodopago', $datos['idmetodopago']);
+            }
             
             return $stmt->execute();
         } catch (PDOException $e) {

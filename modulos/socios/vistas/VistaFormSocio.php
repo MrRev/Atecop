@@ -22,9 +22,12 @@ require_once __DIR__ . '/../../layouts/header.php';
         </a>
     </div>
 
-    <?php if (isset($error)): ?>
+    <?php if (isset($_SESSION['error_socios'])): ?>
         <div class="mensaje-error">
-            <?php echo htmlspecialchars($error); ?>
+            <?php 
+            echo htmlspecialchars($_SESSION['error_socios']);
+            unset($_SESSION['error_socios']);
+            ?>
         </div>
     <?php endif; ?>
 
@@ -34,7 +37,7 @@ require_once __DIR__ . '/../../layouts/header.php';
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="index.php?modulo=socios&accion=<?php echo $esEdicion ? 'editar' : 'guardar'; ?>" 
+    <form method="POST" action="index.php?modulo=socios&accion=guardar" 
         class="formulario-principal" id="formSocio">
         
         <?php if ($esEdicion): ?>
@@ -135,12 +138,17 @@ require_once __DIR__ . '/../../layouts/header.php';
                                     <?php echo ($esEdicion && $socio->getIdtiposocio() == $tipo['idtiposocio']) ? 'selected' : ''; ?>>
                                     <?php echo htmlspecialchars($tipo['nombretipo']); ?>
                                 </option>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </select>
-                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </select>
+</div>
 
-                <div class="campo-formulario">
+<script>
+// Esperar a que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar validaciones del formulario
+    initFormValidations();
+});                <div class="campo-formulario">
                     <label for="idplan">Plan de Membresía *</label>
                     <select id="idplan" name="idplan" required>
                         <option value="">Seleccione un plan</option>

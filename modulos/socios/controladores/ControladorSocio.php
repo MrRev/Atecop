@@ -96,7 +96,11 @@ class ControladorSocio {
             return;
         }
 
-        $socio = new Socio();
+        try {
+            // Debug: Imprimir datos recibidos
+            echo "<script>console.log('Datos POST recibidos:', " . json_encode($_POST) . ");</script>";
+            
+            $socio = new Socio();
         
         // Validar campos requeridos
         if (empty($_POST['dni']) || empty($_POST['nombrecompleto']) || 
@@ -137,11 +141,33 @@ class ControladorSocio {
         } else {
             // Crear
             $resultado = $this->socioDAO->create($socio);
-            $mensaje = $resultado ? 'Socio registrado correctamente' : 'Error al registrar socio';
+            if ($resultado) {
+                $_SESSION['success'] = 'Socio registrado correctamente';
+                header('Location: index.php?modulo=socios&accion=listar');
+                exit;
+            } else {
+                throw new Exception('Error al registrar el socio');
+            }
         }
-
-        $_SESSION[$resultado ? 'success' : 'error'] = $mensaje;
-        header('Location: index.php?modulo=socios&accion=listar');
+        
+        } catch (Exception $e) {
+            // Log en servidor
+            error_log("Error en ControladorSocio::guardar - " . $e->getMessage());
+            
+            // Log en consola del navegador
+            echo "<script>console.error('Error al guardar socio:', " . json_encode($e->getMessage()) . ");</script>";
+            
+            $_SESSION['error_socios'] = $e->getMessage(); // Cambiamos la key para evitar conflictos
+            
+            // Si estamos editando, incluimos el ID en la redirección
+            $redirectUrl = 'index.php?modulo=socios&accion=formulario';
+            if (!empty($_POST['idsocio'])) {
+                $redirectUrl .= '&id=' . $_POST['idsocio'];
+            }
+            
+            header("Location: $redirectUrl");
+            exit;
+        }
     }
 
     /**

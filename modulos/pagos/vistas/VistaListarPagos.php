@@ -48,11 +48,11 @@ if (session_status() === PHP_SESSION_NONE) {
             <tbody>
                 <?php foreach ($pagos as $pago): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($pago['nombres'] . ' ' . $pago['apellidos']); ?></td>
+                        <td><?php echo htmlspecialchars($pago['nombresocio'] ?? 'No especificado'); ?></td>
                         <td>S/ <?php echo number_format($pago['monto'], 2); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($pago['fechapago'])); ?></td>
                         <td><?php echo htmlspecialchars($pago['concepto']); ?></td>
-                        <td><?php echo htmlspecialchars($pago['metodopago']); ?></td>
+                        <td><?php echo htmlspecialchars($pago['nombremetodo'] ?? 'No especificado'); ?></td>
                         <td>
                             <span class="badge <?php echo $pago['estado'] === 'Registrado' ? 'badge-success' : 'badge-danger'; ?>">
                                 <?php echo htmlspecialchars($pago['estado']); ?>

@@ -119,12 +119,23 @@ class ControladorPago {
                     throw new Exception("El archivo es demasiado grande");
                 }
                 
+                // Asegurar que el directorio existe
+                $directorioDestino = __DIR__ . '/../../../public/uploads/comprobantes/';
+                if (!is_dir($directorioDestino)) {
+                    if (!mkdir($directorioDestino, 0777, true)) {
+                        throw new Exception("Error al crear el directorio para comprobantes");
+                    }
+                }
+                
                 $urlcomprobante = uniqid() . '.' . $extension;
-                $rutaDestino = __DIR__ . '/../../../public/uploads/comprobantes/' . $urlcomprobante;
+                $rutaDestino = $directorioDestino . $urlcomprobante;
                 
                 if (!move_uploaded_file($comprobante['tmp_name'], $rutaDestino)) {
                     throw new Exception("Error al guardar el comprobante");
                 }
+                
+                // Asegurar permisos correctos
+                chmod($rutaDestino, 0644);
             }
 
             // Registrar el pago
@@ -141,9 +152,16 @@ class ControladorPago {
             if ($this->pagoDAO->create($datos)) {
                 // Actualizar fecha de vencimiento del socio
                 $socio = $this->socioDAO->read($idsocio);
-                $plan = $this->planDAO->read($socio['idplan']);
+                if (!$socio) {
+                    throw new Exception("No se encontró el socio");
+                }
                 
-                $fechaVencimiento = new DateTime($socio['fechavencimiento']);
+                $plan = $this->planDAO->read($socio->getIdplan());
+                if (!$plan) {
+                    throw new Exception("No se encontró el plan de membresía");
+                }
+                
+                $fechaVencimiento = new DateTime($socio->getFechavencimiento());
                 if ($fechaVencimiento < new DateTime()) {
                     $fechaVencimiento = new DateTime();
                 }
@@ -168,5 +186,46 @@ class ControladorPago {
     public function listar() {
         $pagos = $this->pagoDAO->listAll();
         require_once __DIR__ . '/../vistas/VistaListarPagos.php';
+    }
+
+    /**
+     * Anular un pago
+     */
+    public function anular() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: index.php?modulo=pagos&accion=listar");
+            exit;
+        }
+
+        try {
+            $idpago = filter_input(INPUT_POST, 'idpago', FILTER_VALIDATE_INT);
+            
+            if (!$idpago) {
+                throw new Exception("ID de pago inválido");
+            }
+
+            // Obtener información del pago antes de anularlo
+            $pago = $this->pagoDAO->read($idpago);
+            if (!$pago) {
+                throw new Exception("Pago no encontrado");
+            }
+
+            if ($pago['estado'] === 'Anulado') {
+                throw new Exception("El pago ya está anulado");
+            }
+
+            // Anular el pago
+            if ($this->pagoDAO->anular($idpago)) {
+                $_SESSION['success'] = "Pago anulado correctamente";
+            } else {
+                throw new Exception("Error al anular el pago");
+            }
+
+        } catch (Exception $e) {
+            $_SESSION['error'] = $e->getMessage();
+        }
+
+        header("Location: index.php?modulo=pagos&accion=listar");
+        exit;
     }
 }

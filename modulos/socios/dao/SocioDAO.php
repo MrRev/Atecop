@@ -19,6 +19,18 @@ class SocioDAO {
      */
     public function create(Socio $socio): bool {
         try {
+            // Debug: Imprimir información del socio
+            error_log("Intentando crear socio con DNI: " . $socio->getDni());
+            
+            // Validaciones adicionales
+            if (empty($socio->getDni()) || empty($socio->getNombrecompleto())) {
+                throw new Exception("DNI y nombre completo son obligatorios");
+            }
+
+            if (empty($socio->getIdtiposocio()) || empty($socio->getIdplan())) {
+                throw new Exception("Tipo de socio y plan son obligatorios");
+            }
+
             $sql = "INSERT INTO socio (dni, nombrecompleto, fechanacimiento, direccion, email, 
                     telefono, numcuentabancaria, estado, fechavencimiento, idtiposocio, idplan, idprofesion) 
                     VALUES (:dni, :nombrecompleto, :fechanacimiento, :direccion, :email, 
@@ -38,10 +50,20 @@ class SocioDAO {
             $stmt->bindValue(':idplan', $socio->getIdplan());
             $stmt->bindValue(':idprofesion', $socio->getIdprofesion(), PDO::PARAM_INT);
             
-            return $stmt->execute();
+            $result = $stmt->execute();
+            
+            if (!$result) {
+                $error = $stmt->errorInfo();
+                error_log("Error SQL en SocioDAO::create - " . json_encode($error));
+                echo "<script>console.error('Error SQL:', " . json_encode($error) . ");</script>";
+                throw new Exception("Error al crear el socio: " . ($error[2] ?? "Error desconocido"));
+            }
+            
+            return true;
         } catch (PDOException $e) {
             error_log("Error en SocioDAO::create - " . $e->getMessage());
-            return false;
+            echo "<script>console.error('Error PDO:', " . json_encode($e->getMessage()) . ");</script>";
+            throw new Exception("Error al crear el socio: " . $e->getMessage());
         }
     }
 
@@ -255,7 +277,29 @@ class SocioDAO {
     /**
      * Mapear fila de BD a objeto Socio
      */
-    private function mapRowToSocio(array $row): Socio {
+    /**
+     * Actualizar la fecha de vencimiento y estado de un socio
+     */
+    public function updateVencimiento(int $idsocio, string $fechaVencimiento, string $estado): bool {
+        try {
+            $sql = "UPDATE socio SET 
+                    fechavencimiento = :fechavencimiento,
+                    estado = :estado 
+                    WHERE idsocio = :idsocio";
+            
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindValue(':idsocio', $idsocio, PDO::PARAM_INT);
+            $stmt->bindValue(':fechavencimiento', $fechaVencimiento);
+            $stmt->bindValue(':estado', $estado);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error en SocioDAO::updateVencimiento - " . $e->getMessage());
+            return false;
+        }
+    }
+
+    private function mapRowToSocio($row): Socio {
         $socio = new Socio();
         $socio->setIdsocio($row['idsocio']);
         $socio->setDni($row['dni']);

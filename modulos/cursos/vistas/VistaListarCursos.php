@@ -1,11 +1,4 @@
 <?php
-// Verificar sesión
-session_start();
-if (!isset($_SESSION['idadmin'])) {
-    header('Location: index.php?modulo=seguridad&accion=login');
-    exit;
-}
-
 require_once __DIR__ . '/../../layouts/header.php';
 ?>
 
