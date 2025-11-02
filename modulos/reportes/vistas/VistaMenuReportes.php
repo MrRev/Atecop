@@ -83,6 +83,7 @@ require_once __DIR__ . '/../../layouts/header.php';
                 <div class="botones-reporte">
                     <button type="button" id="btn_socio_html" class="btn btn-secundario">Ver HTML</button>
                     <button type="button" id="btn_socio_pdf" class="btn btn-primario">PDF</button>
+                    <button type="button" id="btn_socio_excel" class="btn btn-primario">Excel</button>
                 </div>
             </div>
             <script>
@@ -90,6 +91,7 @@ require_once __DIR__ . '/../../layouts/header.php';
                     const inputDni = document.getElementById('dni_socio');
                     const btnHtml = document.getElementById('btn_socio_html');
                     const btnPdf = document.getElementById('btn_socio_pdf');
+                    const btnExcel = document.getElementById('btn_socio_excel');
 
                     function buildUrl(formato) {
                         const dni = encodeURIComponent(inputDni.value.trim());
@@ -108,6 +110,10 @@ require_once __DIR__ . '/../../layouts/header.php';
                     });
                     btnPdf.addEventListener('click', function(){
                         const url = buildUrl('pdf');
+                        if (url) window.location.href = url;
+                    });
+                    btnExcel.addEventListener('click', function(){
+                        const url = buildUrl('excel');
                         if (url) window.location.href = url;
                     });
                 })();

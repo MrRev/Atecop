@@ -220,4 +220,97 @@ class ExcelGenerator {
         $writer->save('php://output');
         exit;
     }
+
+    /**
+     * Genera reporte detallado de un socio en Excel
+     * Recibe $datos con keys: 'socio', 'pagos', 'cursos'
+     */
+    public function generarReporteDetalleSocio($datos) {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $socio = $datos['socio'] ?? null;
+        $pagos = $datos['pagos'] ?? [];
+        $cursos = $datos['cursos'] ?? [];
+
+        $sheet->setTitle('Detalle Socio');
+
+        // Título
+        $nombre = $socio['nombrecompleto'] ?? '';
+        $dni = $socio['dni'] ?? '';
+        $sheet->setCellValue('A1', 'REPORTE DETALLADO DE SOCIO');
+        $sheet->mergeCells('A1:F1');
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        $sheet->setCellValue('A2', 'Generado el: ' . date('d/m/Y H:i'));
+        $sheet->mergeCells('A2:F2');
+
+        // Datos personales
+        $sheet->setCellValue('A4', 'Nombre:');
+        $sheet->setCellValue('B4', $nombre);
+        $sheet->setCellValue('A5', 'DNI:');
+        $sheet->setCellValue('B5', $dni);
+        $sheet->setCellValue('A6', 'Email:');
+        $sheet->setCellValue('B6', $socio['email'] ?? '');
+        $sheet->setCellValue('A7', 'Telefono:');
+        $sheet->setCellValue('B7', $socio['telefono'] ?? '');
+        $sheet->setCellValue('A8', 'Tipo:');
+        $sheet->setCellValue('B8', $socio['nombretipo'] ?? '');
+        $sheet->setCellValue('A9', 'Plan:');
+        $sheet->setCellValue('B9', $socio['nombreplan'] ?? '');
+        $sheet->setCellValue('A10', 'Vencimiento:');
+        $sheet->setCellValue('B10', isset($socio['fechavencimiento']) ? date('d/m/Y', strtotime($socio['fechavencimiento'])) : '');
+
+        // Historial de pagos - encabezado
+        $startRow = 12;
+        $sheet->setCellValue('A' . $startRow, 'Fecha');
+        $sheet->setCellValue('B' . $startRow, 'Monto');
+        $sheet->setCellValue('C' . $startRow, 'Concepto');
+        $sheet->setCellValue('D' . $startRow, 'Metodo');
+        $sheet->setCellValue('E' . $startRow, 'Estado');
+        $this->aplicarEstiloEncabezado($sheet, 'A' . $startRow . ':E' . $startRow);
+
+        $fila = $startRow + 1;
+        foreach ($pagos as $p) {
+            $sheet->setCellValue('A' . $fila, isset($p['fechapago']) ? date('d/m/Y', strtotime($p['fechapago'])) : '');
+            $sheet->setCellValue('B' . $fila, isset($p['monto']) ? number_format($p['monto'], 2) : '');
+            $sheet->setCellValue('C' . $fila, $p['concepto'] ?? '');
+            $sheet->setCellValue('D' . $fila, $p['nombremetodo'] ?? '');
+            $sheet->setCellValue('E' . $fila, $p['estado'] ?? '');
+            $fila++;
+        }
+
+        // Cursos inscritos - encabezado
+        $fila += 1; // espacio
+        $startCursos = $fila;
+        $sheet->setCellValue('A' . $startCursos, 'Curso');
+        $sheet->setCellValue('B' . $startCursos, 'Fecha Inscripcion');
+        $sheet->setCellValue('C' . $startCursos, 'Estado Pago');
+        $sheet->setCellValue('D' . $startCursos, 'Ponente');
+        $this->aplicarEstiloEncabezado($sheet, 'A' . $startCursos . ':D' . $startCursos);
+
+        $fila = $startCursos + 1;
+        foreach ($cursos as $c) {
+            $nombreCurso = $c['nombrecurso'] ?? ($c['nombre'] ?? '');
+            $sheet->setCellValue('A' . $fila, $nombreCurso);
+            $sheet->setCellValue('B' . $fila, isset($c['fechainscripcion']) ? date('d/m/Y H:i', strtotime($c['fechainscripcion'])) : '');
+            $sheet->setCellValue('C' . $fila, $c['estadopagocurso'] ?? '');
+            $sheet->setCellValue('D' . $fila, $c['nombre_ponente'] ?? '');
+            $fila++;
+        }
+
+        // Ajustar columnas
+        foreach (range('A', 'F') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        // Descargar
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="reporte_detalle_socio_' . ($dni ?: date('Ymd')) . '.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
 }

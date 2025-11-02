@@ -107,6 +107,10 @@ class ControladorReporte {
                 $pdf = new PDFGenerator();
                 $pdf->generarReporteDetalleSocio($datos);
                 break;
+            case 'excel':
+                $excel = new ExcelGenerator();
+                $excel->generarReporteDetalleSocio($datos);
+                break;
             default:
                 // Pasamos los datos a la vista
                 require_once __DIR__ . '/../vistas/VistaReporteDetalleSocio.php';
