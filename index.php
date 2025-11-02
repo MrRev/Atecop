@@ -64,6 +64,40 @@ try {
             }
             break;
             
+        case 'usuarios':
+            require_once __DIR__ . '/modulos/usuarios/controladores/ControladorUsuario.php';
+            $controlador = new ControladorUsuario();
+
+            switch ($accion) {
+                case 'listar':
+                    $controlador->listar();
+                    break;
+                case 'formulario':
+                case 'crear':
+                    $controlador->mostrarFormulario();
+                    break;
+                case 'guardar':
+                    $controlador->guardar();
+                    break;
+                case 'editar':
+                    $id = $_GET['id'] ?? null;
+                    $controlador->mostrarFormulario($id);
+                    break;
+                case 'perfil':
+                    $id = $_GET['id'] ?? null;
+                    $controlador->verPerfil($id);
+                    break;
+                case 'cambiarEstado':
+                    $controlador->cambiarEstado();
+                    break;
+                case 'validarDNI':
+                    $controlador->validarDNI();
+                    break;
+                default:
+                    $controlador->listar();
+            }
+            break;
+            
         case 'dashboard':
             require_once __DIR__ . '/modulos/seguridad/vistas/VistaDashboard.php';
             break;

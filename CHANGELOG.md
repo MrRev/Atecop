@@ -1,6 +1,54 @@
 # Changelog
 
-## [1.1.0] - 2025-11-01
+## [2.0.0] - 2025-11-01
+
+### 🎯 Características Principales
+
+#### Sistema de Usuarios
+- Nueva interfaz de gestión de usuarios
+- Validación en tiempo real de DNI con API
+- Sistema mejorado de roles y permisos
+- Perfiles de usuario detallados
+- Control dinámico de estados de usuario
+
+#### Mejoras de UX/UI
+- Implementación de Bootstrap 5
+- Feedback visual en tiempo real
+- Nuevos componentes interactivos
+- Validación de formularios mejorada
+- Sistema de notificaciones
+
+#### Seguridad
+- Implementación de HTMLPurifier
+- Mejora en manejo de sesiones
+- Protección contra XSS
+- Sanitización de datos mejorada
+- Validación robusta de entradas
+
+#### Optimizaciones
+- Mejora en consultas SQL
+- Caché de consultas frecuentes
+- Optimización de carga de assets
+- Reducción de llamadas AJAX
+- Mejor manejo de errores
+
+### 🔧 Correcciones
+
+#### Accesibilidad
+- Labels en formularios
+- Atributos ARIA
+- Contraste de colores
+- Navegación por teclado
+- Mensajes de error claros
+
+#### Recursos
+- Rutas de CSS/JS corregidas
+- Sistema de imágenes mejorado
+- Gestión de uploads optimizada
+- Assets comprimidos
+- Carga condicional de recursos
+
+## [1.1.0] - 2025-10-15
 
 ### 🚀 Nuevas Características y Mejoras
 
@@ -19,11 +67,6 @@
 - Protección de campos clave en formularios de edición
 - Implementación de readonly en DNI y nombre completo
 
-#### Módulo de Reportes
-- Nuevas vistas HTML para reportes
-  - VistaReporteSociosMorosos.php
-  - VistaReporteProximosVencimientos.php
-
 ### 🐞 Correcciones de Errores
 
 #### Sesión y AJAX
@@ -36,18 +79,12 @@
 - Implementación de exit después de json_encode()
 - Separación clara de respuestas AJAX y HTML
 
-#### Enrutamiento
-- Corrección de rutas en index.php
-- Alineación de nombres de acciones
-- Corrección de case breaks faltantes
+## [1.0.0] - 2024-01-01
 
-#### Carga de Assets
-- Corrección de RewriteBase en .htaccess
-- Unificación de rutas de assets usando BASE_URL
-- Implementación consistente en header.php y footer.php
-
-#### Errores de Tipado y Métodos
-- Corrección de uso de objetos vs arrays
+### 🎉 Versión Inicial
+- Implementación base del sistema
+- Módulos principales
+- Estructura MVC básica
 - Actualización de nombres de métodos para consistencia
 - Corrección de referencias a métodos inexistentes
 

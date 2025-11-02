@@ -1,32 +1,75 @@
-# Sistema de Gestión ATECOP
+# Sistema de Gestión ATECOP v2.0
 
-Sistema web de gestión interna para la Asociación Técnica de Constructores y Profesionales (ATECOP).
+Sistema web de gestión interna para la Asociación Técnica de Constructores y Profesionales (ATECOP). Esta versión incluye mejoras significativas en la interfaz de usuario, validación de datos y seguridad.
 
-## Características
+## Características Principales
 
-- **Gestión de Socios**: Registro, modificación, consulta y baja de socios con validación de DNI/RUC mediante API externa
-- **Gestión de Membresías**: Administración de planes de membresía y asignación a socios
-- **Gestión de Pagos**: Registro de pagos con comprobantes, cálculo automático de vencimientos
-- **Gestión de Ponentes**: Administración de ponentes/tutores para cursos
-- **Gestión de Cursos**: Creación de cursos e inscripción de socios
-- **Reportes**: Generación de reportes en PDF y Excel (socios morosos, vencimientos, etc.)
-- **Seguridad**: Sistema de autenticación con sesiones PHP
+### Gestión de Usuarios y Accesos
+- **Sistema de Roles**: Administración granular de permisos
+- **Validación Avanzada**: Verificación en tiempo real de DNI mediante API
+- **Perfiles Completos**: Vista detallada de información de usuarios
+- **Estados Dinámicos**: Control de usuarios activos/inactivos
 
-## Tecnologías
+### Gestión de Socios
+- **Validación DNI/RUC**: Integración con API Perú Dev
+- **Perfiles Detallados**: Información completa de cada socio
+- **Gestión de Estados**: Control de membresías activas/inactivas
+- **Historial**: Seguimiento de pagos y actividades
 
-- **Backend**: PHP 8+ (sin frameworks)
-- **Base de Datos**: MySQL
-- **Frontend**: HTML5, CSS3, JavaScript Vanilla
-- **Arquitectura**: MVC + DAO modular
-- **Librerías**: FPDF, PhpSpreadsheet (vía Composer)
+### Módulos Operativos
+- **Gestión de Membresías**: Planes y asignaciones
+- **Control de Pagos**: Comprobantes y vencimientos
+- **Administración de Cursos**: Inscripciones y seguimiento
+- **Gestión de Ponentes**: Perfiles y asignaciones
 
-## Requisitos
+### Reportes y Análisis
+- **Exportación Múltiple**: Formatos PDF y Excel
+- **Reportes Dinámicos**: Filtros personalizables
+- **Estadísticas**: Dashboard con KPIs principales
 
-- PHP 8.0 o superior
-- MySQL 5.7 o superior
-- Apache con mod_rewrite habilitado
-- Composer (para instalar dependencias)
-- XAMPP (recomendado para desarrollo local)
+## Tecnologías y Stack
+
+### Backend
+- **PHP**: Versión 8.1 o superior
+- **MySQL**: Versión 8.0 o superior
+- **Apache**: 2.4 con mod_rewrite
+
+### Frontend
+- **HTML5 & CSS3**: Diseño responsive
+- **JavaScript**: ES6+, Fetch API
+- **Bootstrap**: v5.2 para componentes UI
+- **Font Awesome**: Para iconografía
+
+### Arquitectura y Patrones
+- **MVC**: Arquitectura Modelo-Vista-Controlador
+- **DAO**: Data Access Objects para abstracción de datos
+- **Singleton**: Para conexiones de base de datos
+- **Factory**: Para creación de objetos complejos
+
+### Librerías y Dependencias
+- **FPDF**: Generación de PDFs
+- **PhpSpreadsheet**: Manejo de Excel
+- **HTMLPurifier**: Seguridad XSS
+- **Composer**: Gestión de dependencias
+
+## Requisitos del Sistema
+
+### Servidor
+- PHP 8.1+
+- MySQL 8.0+
+- Apache 2.4+
+- mod_rewrite habilitado
+- Extensiones PHP:
+  - PDO_MySQL
+  - GD
+  - mbstring
+  - zip
+  - xml
+
+### Desarrollo Local
+- XAMPP (última versión)
+- Composer 2.0+
+- Git
 
 ## Instalación
 
@@ -78,26 +121,47 @@ chmod -R 755 public/uploads/
 
 ### 6. Acceder al sistema
 
-1. Inicia Apache y MySQL en XAMPP
-2. Abre tu navegador y ve a: `http://localhost/sistema_atecop/`
-3. Credenciales por defecto:
-   - Usuario: `admin`
-   - Contraseña: `admin123`
+1. Inicia los servicios en XAMPP:
+   ```bash
+   # Windows - Usar XAMPP Control Panel
+   # Linux/Mac
+   sudo /opt/lampp/lampp start
+   ```
 
-**IMPORTANTE**: Cambia la contraseña por defecto después del primer inicio de sesión.
+2. Accede a la aplicación:
+   - URL: `http://localhost/Atecop/`
+   - Credenciales por defecto:
+     ```
+     Usuario: admin
+     Contraseña: admin123
+     ```
 
-## Estructura del Proyecto
+⚠️ **IMPORTANTE**: 
+- Cambiar la contraseña predeterminada inmediatamente
+- Configurar un certificado SSL para producción
+- Revisar los permisos de archivos en producción
 
-\`\`\`
-sistema_atecop/
-├── config/              # Configuración global
-├── public/              # Archivos públicos (CSS, JS, imágenes, uploads)
-├── modulos/             # Módulos funcionales (MVC+DAO)
-│   ├── socios/
-│   ├── membresias/
-│   ├── pagos/
-│   ├── ponentes/
-│   ├── cursos/
+## Estructura del Proyecto v2.0
+
+```
+Atecop/
+├── config/                 # Configuración global
+│   └── config.php         # Variables de entorno
+├── public/                # Archivos públicos
+│   ├── css/              # Estilos
+│   ├── js/               # JavaScript
+│   ├── img/              # Imágenes
+│   └── uploads/          # Archivos subidos
+├── modulos/              # Módulos del sistema
+│   ├── cursos/          # Gestión de cursos
+│   ├── layouts/         # Plantillas comunes
+│   ├── membresias/      # Planes y membresías
+│   ├── pagos/           # Control de pagos
+│   ├── ponentes/        # Gestión de ponentes
+│   ├── reportes/        # Generación de informes
+│   ├── seguridad/       # Autenticación y permisos
+│   ├── socios/          # Gestión de socios
+│   └── usuarios/        # Admin. usuarios
 │   ├── reportes/
 │   ├── seguridad/
 │   └── layouts/         # Header y footer compartidos

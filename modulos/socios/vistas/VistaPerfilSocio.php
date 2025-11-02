@@ -202,7 +202,12 @@ require_once __DIR__ . '/../../layouts/header.php';
                                             <?php echo htmlspecialchars($estadoPagoCurso); ?>
                                         </span>
                                     </td>
-                                    <td><?php echo htmlspecialchars($curso['estado'] ?? ''); ?></td>
+                                    <td>
+                                        <?php $estadoCurso = $curso['estado_curso'] ?? $curso['estado'] ?? ''; ?>
+                                        <span class="estado-badge estado-<?php echo strtolower($estadoCurso); ?>">
+                                            <?php echo htmlspecialchars($estadoCurso); ?>
+                                        </span>
+                                    </td>
                                 </tr>
                         <?php endforeach; ?>
                     </tbody>

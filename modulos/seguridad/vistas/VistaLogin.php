@@ -13,7 +13,7 @@ if (isset($_SESSION['idadmin'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - <?php echo APP_NAME; ?></title>
-    <link rel="stylesheet" href="/css/Login.css">
+    <link rel="stylesheet" href="<?php echo CSS_URL; ?>/estilos.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 
@@ -238,47 +238,17 @@ body {
                     ?>
                 </div>
             <?php endif; ?>
-<<<<<<< HEAD
-            
-            <form action="<?php echo BASE_URL; ?>/index.php?modulo=seguridad&accion=procesarLogin" method="POST" id="formLogin">
-                <div class="form-group">
-                    <label for="usuario">Usuario</label>
-                    <input 
-                        type="text" 
-                        id="usuario" 
-                        name="usuario" 
-                        class="form-control" 
-                        required 
-                        autofocus 
-                        placeholder="Ingrese su usuario"
-                        autocomplete="username"
-                    >
-                </div>             
-                <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="form-control" 
-                        required 
-                        placeholder="Ingrese su contraseña"
-                        autocomplete="current-password">
-                </div>
-
-                <button type="submit" class="btn btn-primary btn-login">Iniciar Sesión</button>
-=======
 
             <form action="<?php echo BASE_URL; ?>/index.php?modulo=seguridad&accion=procesarLogin" method="POST">
                 <div class="input-box">
-                    <input type="text" name="usuario" required>
-                    <label>Usuario</label>
+                    <input id="usuario" type="text" name="usuario" required placeholder="Ingrese su usuario" title="Usuario" aria-label="Usuario">
+                    <label for="usuario">Usuario</label>
                     <i class='bx bxs-user'></i>
                 </div>
 
                 <div class="input-box">
-                    <input type="password" name="password" required>
-                    <label>Contraseña</label>
+                    <input id="password" type="password" name="password" required placeholder="Ingrese su contraseña" title="Contraseña" aria-label="Contraseña">
+                    <label for="password">Contraseña</label>
                     <i class='bx bxs-lock-alt'></i>
                 </div>
 
@@ -289,7 +259,6 @@ body {
                 <div class="regi-link">
                     <p><a href="#">¿Olvidaste tu contraseña?</a></p>
                 </div>
->>>>>>> 6af4e7485339a38b226a0b19b8efcb562bdb5489
             </form>
         </div>
 

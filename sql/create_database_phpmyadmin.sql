@@ -166,6 +166,30 @@ CREATE TABLE administrador (
     INDEX idx_admin_usuario (usuario)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Administradores del sistema';
 
+-- Tabla: usuario
+DROP TABLE IF EXISTS usuario;
+CREATE TABLE usuario (
+    idusuario INT AUTO_INCREMENT PRIMARY KEY,
+    dni VARCHAR(15) NOT NULL UNIQUE COMMENT 'DNI validado por API',
+    nombrecompleto VARCHAR(255) NOT NULL COMMENT 'Nombre completo del usuario (no editable, validado por API)',
+    nombreusuario VARCHAR(100) NOT NULL UNIQUE COMMENT 'Formato: primer_nombre primer_apellido',
+    email VARCHAR(100) UNIQUE,
+    telefono VARCHAR(20),
+    clavehash VARCHAR(255) NOT NULL COMMENT 'Contraseña hasheada con password_hash()',
+    direccion VARCHAR(255),
+    rol VARCHAR(50) NOT NULL DEFAULT 'administrador' COMMENT 'Por defecto administrador, preparado para roles futuros',
+    idsocio INT NULL COMMENT 'Relación opcional con socio',
+    estado VARCHAR(20) NOT NULL DEFAULT 'Activo' COMMENT 'Activo / Inactivo',
+    fechacreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    fechamodificacion TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (idsocio) REFERENCES socio(idsocio) ON DELETE SET NULL,
+    INDEX idx_usuario_dni (dni),
+    INDEX idx_usuario_nombreusuario (nombreusuario),
+    INDEX idx_usuario_email (email),
+    INDEX idx_usuario_rol (rol),
+    INDEX idx_usuario_estado (estado)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Usuarios del sistema con validación de DNI y roles';
+
 -- Tabla: configuracion
 DROP TABLE IF EXISTS configuracion;
 CREATE TABLE configuracion (
@@ -223,6 +247,39 @@ INSERT INTO configuracion (llave, valor) VALUES
 ('IGV_ACTUAL', '0.18'),
 ('NOMBRE_SISTEMA', 'Sistema de Gestión ATECOP'),
 ('VERSION_SISTEMA', '1.0.0');
+
+-- Insertar usuario administrador por defecto
+-- Usuario: mimi
+-- Contraseña: 123
+-- DNI y nombre inventados pero válidos
+INSERT INTO usuario (
+    dni,
+    nombrecompleto,
+    nombreusuario,
+    email,
+    telefono,
+    clavehash,
+    direccion,
+    rol,
+    estado
+) VALUES (
+    '45678912',
+    'Miriam Flores Castillo',
+    'mimi',
+    'mimi@atecop.com',
+    '987654321',
+    '$2y$10$4feLCdBI5vPmdwZZRKDkoOTLbrlbezc5.hcyF.Xip76.f/o8xv9wy', -- hash de '123'
+    'Av. Los Ingenieros 123, Lima',
+    'administrador',
+    'Activo'
+);
+INSERT INTO administrador (usuario, clavehash, nombrecompleto, estado)
+VALUES (
+  'mimi',
+  '$2y$10$4feLCdBI5vPmdwZZRKDkoOTLbrlbezc5.hcyF.Xip76.f/o8xv9wy',
+  'Miriam Flores Castillo',
+  'Activo'
+);
 
 COMMIT;
 

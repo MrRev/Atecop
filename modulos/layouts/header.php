@@ -12,8 +12,12 @@ SessionManager::checkSession();
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/bootstrap.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/estilos.css">
     <!-- Scripts -->
-    <script type="text/javascript" src="/lolo/public/js/validaciones.js"></script>
-    <script type="text/javascript" src="/lolo/public/js/scripts.js"></script>
+    <?php if (file_exists(PUBLIC_PATH . '/js/validaciones.js')): ?>
+        <script type="text/javascript" src="<?php echo JS_URL; ?>/validaciones.js"></script>
+    <?php endif; ?>
+    <?php if (file_exists(PUBLIC_PATH . '/js/scripts.js')): ?>
+        <script type="text/javascript" src="<?php echo JS_URL; ?>/scripts.js"></script>
+    <?php endif; ?>
     <style>
         body {
             display: flex;
@@ -106,7 +110,9 @@ SessionManager::checkSession();
     <nav class="navbar">
         <div class="navbar-container">
             <a href="<?php echo BASE_URL; ?>/index.php?modulo=dashboard" class="navbar-brand">
-                <img src="<?php echo IMG_URL; ?>/logo-atecop.png" alt="ATECOP">
+                <?php if (file_exists(PUBLIC_PATH . '/img/logo-atecop.png')): ?>
+                    <img src="<?php echo IMG_URL; ?>/logo-atecop.png" alt="ATECOP">
+                <?php endif; ?>
                 <span>ATECOP</span>
             </a>
             
@@ -118,10 +124,18 @@ SessionManager::checkSession();
                 <li><a href="<?php echo BASE_URL; ?>/index.php?modulo=ponentes&accion=listar" class="nav-link">Ponentes</a></li>
                 <li><a href="<?php echo BASE_URL; ?>/index.php?modulo=cursos&accion=listar" class="nav-link">Cursos</a></li>
                 <li><a href="<?php echo BASE_URL; ?>/index.php?modulo=reportes&accion=menu" class="nav-link">Reportes</a></li>
+                <li><a href="<?php echo BASE_URL; ?>/index.php?modulo=usuarios&accion=listar" class="nav-link">Usuarios</a></li>
             </ul>
             
             <div class="navbar-user">
-                <span class="user-name"><?php echo htmlspecialchars($_SESSION['nombrecompleto'] ?? $_SESSION['usuario']); ?></span>
+                <?php if (isset($_SESSION['idusuario'])): ?>
+                    <a href="<?php echo BASE_URL; ?>/index.php?modulo=usuarios&accion=perfil" class="user-name">
+                        <i class="fas fa-user"></i>
+                        <?php echo htmlspecialchars($_SESSION['nombrecompleto'] ?? $_SESSION['nombreusuario']); ?>
+                    </a>
+                <?php else: ?>
+                    <span class="user-name"><?php echo htmlspecialchars($_SESSION['nombrecompleto'] ?? $_SESSION['usuario']); ?></span>
+                <?php endif; ?>
                 <a href="<?php echo BASE_URL; ?>/index.php?modulo=seguridad&accion=logout" class="btn-logout">Cerrar Sesión</a>
             </div>
         </div>
