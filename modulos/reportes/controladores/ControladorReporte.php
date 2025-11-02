@@ -73,23 +73,33 @@ class ControladorReporte {
      * Genera reporte detallado de un socio
      * CORRECCIÓN: Renombrada a 'reporteSocio' y se lee $_GET['id']
      */
-    public function reporteSocio() {
-        // La vista (que corregimos) envía 'id', no 'idsocio'
-        $idsocio = $_GET['id'] ?? null; 
+    public function reporteSocio($dniOrId = null) {
+        // Ahora aceptamos búsqueda por DNI (param name: dni) o por id (compatibilidad)
         $formato = $_GET['formato'] ?? 'html';
 
-        if (!$idsocio) {
-            $_SESSION['error_reporte'] = 'ID de socio requerido';
-            header('Location: index.php?modulo=reportes&accion=menu');
-            exit;
-        }
-
-        $datos = $this->reporteDAO->getDatosCompletosSocio($idsocio);
-
-        if (!$datos) {
-            $_SESSION['error_reporte'] = 'Socio no encontrado con ID ' . $idsocio;
-            header('Location: index.php?modulo=reportes&accion=menu');
-            exit;
+        $dni = $_GET['dni'] ?? null;
+        if ($dni) {
+            // Buscar por DNI
+            $datos = $this->reporteDAO->getDatosCompletosSocioPorDni($dni);
+            if (!$datos) {
+                $_SESSION['error_reporte'] = 'Socio no encontrado con DNI ' . htmlspecialchars($dni);
+                header('Location: index.php?modulo=reportes&accion=menu');
+                exit;
+            }
+        } else {
+            // Compatibilidad: aceptar id (antiguo comportamiento)
+            $idsocio = $dniOrId ?? ($_GET['id'] ?? null);
+            if (!$idsocio) {
+                $_SESSION['error_reporte'] = 'ID o DNI de socio requerido';
+                header('Location: index.php?modulo=reportes&accion=menu');
+                exit;
+            }
+            $datos = $this->reporteDAO->getDatosCompletosSocio($idsocio);
+            if (!$datos) {
+                $_SESSION['error_reporte'] = 'Socio no encontrado con ID ' . $idsocio;
+                header('Location: index.php?modulo=reportes&accion=menu');
+                exit;
+            }
         }
 
         switch ($formato) {

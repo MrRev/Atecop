@@ -104,6 +104,25 @@ class ReporteDAO {
     }
 
     /**
+     * Obtiene datos completos de un socio por DNI para reporte detallado
+     */
+    public function getDatosCompletosSocioPorDni($dni) {
+        // Buscar el idsocio correspondiente al DNI
+        $sqlId = "SELECT idsocio FROM socio WHERE dni = :dni LIMIT 1";
+        $stmt = $this->db->prepare($sqlId);
+        $stmt->bindParam(':dni', $dni);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$result) {
+            return null;
+        }
+        $idsocio = $result['idsocio'];
+
+        // Reusar la función existente para devolver la estructura completa
+        return $this->getDatosCompletosSocio($idsocio);
+    }
+
+    /**
      * Obtiene socios para inhabilitar (morosos por más de X días)
      */
     public function getSociosParaInhabilitar($diasMora = 60) {

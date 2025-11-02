@@ -237,8 +237,9 @@ try {
                     $controlador->reporteVencimientos();
                     break;
                 case 'socio':
-                    $id = $_GET['id'] ?? null;
-                    $controlador->reporteSocio($id);
+                    // Ahora aceptamos 'dni' como parámetro preferente; mantenemos compatibilidad con 'id'
+                    $dni = $_GET['dni'] ?? null;
+                    $controlador->reporteSocio($dni);
                     break;
                 case 'inhabilitar':
                     $controlador->reporteInhabilitar();

@@ -72,21 +72,46 @@ require_once __DIR__ . '/../../layouts/header.php';
         <div class="tarjeta-reporte">
             <div class="icono-reporte">👤</div>
             <h3>Detalle de Socio</h3>
-            <p>Reporte completo de un socio específico</p>
-            <form method="get" action="index.php" class="form-inline">
+            <p>Reporte completo de un socio específico (buscar por DNI)</p>
+            <!-- Usamos DNI en lugar de ID y botones JS para construir la URL -->
+            <div class="form-inline">
                 <input type="hidden" name="modulo" value="reportes">
-                <!-- CORRECCIÓN: 'accion=socio' -->
                 <input type="hidden" name="accion" value="socio">
-                <label>ID Socio: 
-                    <!-- CORRECCIÓN: El index.php espera 'id', no 'idsocio' -->
-                    <input type="number" name="id" required class="input-pequeno">
+                <label>DNI: 
+                    <input type="text" id="dni_socio" name="dni" required class="input-pequeno" placeholder="Ej: 12345678">
                 </label>
                 <div class="botones-reporte">
-                    <button type="submit" class="btn btn-secundario">Ver HTML</button>
-                    <!-- CORRECCIÓN: Los 'formaction' deben incluir la ruta completa -->
-                    <button type="submit" formaction="index.php?modulo=reportes&accion=socio&formato=pdf" class="btn btn-primario">PDF</button>
+                    <button type="button" id="btn_socio_html" class="btn btn-secundario">Ver HTML</button>
+                    <button type="button" id="btn_socio_pdf" class="btn btn-primario">PDF</button>
                 </div>
-            </form>
+            </div>
+            <script>
+                (function(){
+                    const inputDni = document.getElementById('dni_socio');
+                    const btnHtml = document.getElementById('btn_socio_html');
+                    const btnPdf = document.getElementById('btn_socio_pdf');
+
+                    function buildUrl(formato) {
+                        const dni = encodeURIComponent(inputDni.value.trim());
+                        if (!dni) {
+                            alert('Ingrese el DNI del socio');
+                            return null;
+                        }
+                        let url = 'index.php?modulo=reportes&accion=socio&dni=' + dni;
+                        if (formato) url += '&formato=' + formato;
+                        return url;
+                    }
+
+                    btnHtml.addEventListener('click', function(){
+                        const url = buildUrl();
+                        if (url) window.location.href = url;
+                    });
+                    btnPdf.addEventListener('click', function(){
+                        const url = buildUrl('pdf');
+                        if (url) window.location.href = url;
+                    });
+                })();
+            </script>
         </div>
 
         <!-- Reporte 4: Socios para Inhabilitar -->
