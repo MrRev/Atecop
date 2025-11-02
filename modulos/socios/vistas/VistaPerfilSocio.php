@@ -144,24 +144,25 @@ require_once __DIR__ . '/../../layouts/header.php';
                     <tbody>
                         <?php foreach ($pagos as $pago): ?>
                             <tr>
-                                <td><?php echo date('d/m/Y', strtotime($pago['fechapago'])); ?></td>
-                                <td><?php echo htmlspecialchars($pago['concepto']); ?></td>
-                                <td>S/ <?php echo number_format($pago['monto'], 2); ?></td>
-                                <td><?php echo htmlspecialchars($pago['nombremetodo']); ?></td>
-                                <td>
-                                    <span class="estado-badge estado-<?php echo strtolower($pago['estado']); ?>">
-                                        <?php echo htmlspecialchars($pago['estado']); ?>
-                                    </span>
-                                </td>
-                                <td>
-                                    <?php if ($pago['urlcomprobante']): ?>
-                                        <a href="<?php echo htmlspecialchars($pago['urlcomprobante']); ?>" 
-                                           target="_blank" class="enlace-comprobante">Ver</a>
-                                    <?php else: ?>
-                                        <span class="texto-gris">Sin comprobante</span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
+                                    <td><?php echo isset($pago['fechapago']) ? date('d/m/Y', strtotime($pago['fechapago'])) : ''; ?></td>
+                                    <td><?php echo htmlspecialchars($pago['concepto'] ?? ''); ?></td>
+                                    <td>S/ <?php echo number_format($pago['monto'] ?? 0, 2); ?></td>
+                                    <td><?php echo htmlspecialchars($pago['nombremetodo'] ?? ''); ?></td>
+                                    <td>
+                                        <?php $estadoPago = $pago['estado'] ?? ''; ?>
+                                        <span class="estado-badge estado-<?php echo strtolower($estadoPago); ?>">
+                                            <?php echo htmlspecialchars($estadoPago); ?>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <?php if (!empty($pago['urlcomprobante'])): ?>
+                                            <a href="<?php echo htmlspecialchars($pago['urlcomprobante']); ?>" 
+                                               target="_blank" class="enlace-comprobante">Ver</a>
+                                        <?php else: ?>
+                                            <span class="texto-gris">Sin comprobante</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -192,16 +193,17 @@ require_once __DIR__ . '/../../layouts/header.php';
                     <tbody>
                         <?php foreach ($cursos as $curso): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($curso['nombrecurso']); ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($curso['fechainicio'])); ?></td>
-                                <td><?php echo date('d/m/Y', strtotime($curso['fechafin'])); ?></td>
-                                <td>
-                                    <span class="estado-badge estado-<?php echo strtolower($curso['estadopagocurso']); ?>">
-                                        <?php echo htmlspecialchars($curso['estadopagocurso']); ?>
-                                    </span>
-                                </td>
-                                <td><?php echo htmlspecialchars($curso['estado']); ?></td>
-                            </tr>
+                                    <td><?php echo htmlspecialchars($curso['nombrecurso'] ?? $curso['nombre'] ?? ''); ?></td>
+                                    <td><?php echo !empty($curso['fechainicio']) ? date('d/m/Y', strtotime($curso['fechainicio'])) : ''; ?></td>
+                                    <td><?php echo !empty($curso['fechafin']) ? date('d/m/Y', strtotime($curso['fechafin'])) : ''; ?></td>
+                                    <td>
+                                        <?php $estadoPagoCurso = $curso['estadopagocurso'] ?? ''; ?>
+                                        <span class="estado-badge estado-<?php echo strtolower($estadoPagoCurso); ?>">
+                                            <?php echo htmlspecialchars($estadoPagoCurso); ?>
+                                        </span>
+                                    </td>
+                                    <td><?php echo htmlspecialchars($curso['estado'] ?? ''); ?></td>
+                                </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
