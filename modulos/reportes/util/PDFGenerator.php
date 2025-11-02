@@ -195,6 +195,31 @@ class PDFGenerator extends FPDF {
             }
         }
 
+        // Cursos inscritos
+        if (!empty($datos['cursos'])) {
+            $this->Ln(5);
+            $this->SetFont('Arial', 'B', 11);
+            $this->Cell(0, 8, 'Cursos Inscritos', 0, 1);
+            $this->SetFont('Arial', 'B', 9);
+            $this->SetFillColor($this->colorSecundario[0], $this->colorSecundario[1], $this->colorSecundario[2]);
+            $this->SetTextColor(255, 255, 255);
+            $this->Cell(70, 7, 'Curso', 1, 0, 'C', true);
+            $this->Cell(40, 7, 'Fecha Inscripcion', 1, 0, 'C', true);
+            $this->Cell(35, 7, 'Estado Pago', 1, 0, 'C', true);
+            $this->Cell(45, 7, 'Ponente', 1, 1, 'C', true);
+
+            $this->SetFont('Arial', '', 9);
+            $this->SetTextColor($this->colorTexto[0], $this->colorTexto[1], $this->colorTexto[2]);
+            foreach ($datos['cursos'] as $curso) {
+                $nombreCurso = isset($curso['nombrecurso']) ? $curso['nombrecurso'] : ($curso['nombre'] ?? '');
+                $this->Cell(70, 6, substr($nombreCurso, 0, 40), 1);
+                $this->Cell(40, 6, isset($curso['fechainscripcion']) ? date('d/m/Y H:i', strtotime($curso['fechainscripcion'])) : '', 1);
+                $this->Cell(35, 6, $curso['estadopagocurso'] ?? '', 1);
+                $this->Cell(45, 6, $curso['nombre_ponente'] ?? '', 1);
+                $this->Ln();
+            }
+        }
+
         $this->Output('D', 'reporte_socio_' . $socio['dni'] . '_' . date('Ymd') . '.pdf');
     }
 
