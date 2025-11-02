@@ -5,7 +5,7 @@ require_once __DIR__ . '/../../layouts/header.php';
 <div class="contenedor-principal">
     <div class="encabezado-seccion">
         <h1>Gestión de Cursos</h1>
-        <a href="index.php?modulo=cursos&accion=formulario" class="boton-primario">
+        <a href="index.php?modulo=cursos&accion=crear" class="boton-primario">
             + Nuevo Curso
         </a>
     </div>
@@ -69,8 +69,8 @@ require_once __DIR__ . '/../../layouts/header.php';
                             <td class="acciones-celda">
                                 <a href="index.php?modulo=cursos&accion=inscripciones&id=<?php echo $curso['idcurso']; ?>" 
                                    class="boton-accion boton-ver" title="Gestionar inscripciones">Inscritos</a>
-                                <a href="index.php?modulo=cursos&accion=formulario&id=<?php echo $curso['idcurso']; ?>" 
-                                   class="boton-accion boton-editar">Editar</a>
+                                <a href="index.php?modulo=cursos&accion=editar&id=<?php echo $curso['idcurso']; ?>" 
+                                    class="boton-accion boton-editar">Editar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

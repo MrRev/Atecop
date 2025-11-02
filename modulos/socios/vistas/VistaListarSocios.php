@@ -78,11 +78,17 @@ require_once __DIR__ . '/../../layouts/header.php';
                                 <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($socio->getFechavencimiento()))); ?></td>
                                 <td>
                                     <a href="<?php echo BASE_URL; ?>/index.php?modulo=socios&accion=perfil&id=<?php echo $socio->getIdsocio(); ?>" 
-                                       class="btn btn-sm btn-info">Ver</a>
-                                    <a href="<?php echo BASE_URL; ?>/index.php?modulo=socios&accion=formulario&id=<?php echo $socio->getIdsocio(); ?>" 
-                                       class="btn btn-sm btn-warning">Editar</a>
-                                    <button onclick="confirmarBaja(<?php echo $socio->getIdsocio(); ?>)" 
-                                            class="btn btn-sm btn-danger">Baja</button>
+                                        class="btn btn-sm btn-info">Ver</a>
+                                    <a href="<?php echo BASE_URL; ?>/index.php?modulo=socios&accion=editar&id=<?php echo $socio->getIdsocio(); ?>" 
+                                        class="btn btn-sm btn-warning">Editar</a>
+                                    
+                                    <?php if ($socio->getEstado() != 'Inactivo'): ?>
+                                        <button onclick="confirmarBaja(<?php echo $socio->getIdsocio(); ?>)" 
+                                                class="btn btn-sm btn-danger">Baja</button>
+                                    <?php else: ?>
+                                        <button onclick="confirmarReactivar(<?php echo $socio->getIdsocio(); ?>)" 
+                                                class="btn btn-sm btn-success">Activar</button>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -98,11 +104,104 @@ require_once __DIR__ . '/../../layouts/header.php';
 </div>
 
 <script>
-function confirmarBaja(idsocio) {
-    if (confirm('¿Está seguro de dar de baja a este socio?')) {
-        window.location.href = '<?php echo BASE_URL; ?>/index.php?modulo=socios&accion=baja&id=' + idsocio;
+    /**
+     * Confirma y ejecuta la reactivación de un socio
+     */
+    async function confirmarReactivar(idsocio) {
+        
+        if (!confirm('¿Está seguro de reactivar a este socio?')) {
+            return; // El usuario canceló
+        }
+    
+        // Apuntamos a la nueva acción
+        const url = `<?php echo BASE_URL; ?>/index.php?modulo=socios&accion=reactivar&id=${idsocio}`; 
+    
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin'
+            });
+    
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert('Sesión expirada. Redirigiendo al login...');
+                    window.location.href = 'index.php?modulo=seguridad&accion=login';
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return;
+            }
+    
+            const data = await response.json();
+    
+            if (data.success) {
+                alert(data.message); // "Socio reactivado correctamente"
+                location.reload(); 
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            console.error('Error al reactivar:', error);
+            alert('Error de conexión.');
+        }
     }
-}
-</script>
 
+    async function confirmarBaja(idsocio) {
+        
+        // 1. Pide confirmación (esto ya lo tenías)
+        if (!confirm('¿Está seguro de dar de baja a este socio?')) {
+            return; // El usuario hizo clic en "Cancelar"
+        }
+
+        // 2. Construir la URL
+        const url = `<?php echo BASE_URL; ?>/index.php?modulo=socios&accion=baja&id=${idsocio}`;
+
+        try {
+            // 3. Hacer la llamada AJAX (Fetch)
+            const response = await fetch(url, {
+                method: 'GET', // Tu enrutador (index.php) espera un GET
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Importante para la sesión
+                },
+                credentials: 'same-origin'
+            });
+
+            // 4. Manejar si la sesión expiró (error 401)
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert('Sesión expirada. Por favor, inicie sesión de nuevo.');
+                    window.location.href = 'index.php?modulo=seguridad&accion=login';
+                } else {
+                    // Otro error de servidor (ej. 500)
+                    throw new Error('Error en la respuesta del servidor: ' + response.status);
+                }
+                return;
+            }
+
+            // 5. Leer la respuesta JSON que envía tu controlador
+            const data = await response.json();
+
+            // 6. ¡ESTA ES LA LÓGICA QUE QUERÍAS!
+            if (data.success) {
+                // Mostrar el mensajito de éxito
+                alert(data.message); 
+                
+                // Recargar la página para ver el estado actualizado
+                location.reload(); 
+            } else {
+                // Mostrar un error si el PHP falló
+                alert('Error: ' + data.message);
+            }
+
+        } catch (error) {
+            console.error('Error al dar de baja:', error);
+            alert('Error de conexión. No se pudo completar la acción.');
+        }
+    }
+</script>
 <?php require_once __DIR__ . '/../../layouts/footer.php'; ?>

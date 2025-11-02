@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../layouts/header.php';
 <div class="contenedor-principal">
     <div class="encabezado-seccion">
         <h1>Gestión de Planes de Membresía</h1>
-        <a href="index.php?modulo=membresias&accion=formulario" class="boton-primario">
+        <a href="index.php?modulo=membresias&accion=crear" class="boton-primario">
             + Nuevo Plan
         </a>
     </div>
@@ -51,8 +51,8 @@ require_once __DIR__ . '/../../layouts/header.php';
                                 </span>
                             </td>
                             <td class="acciones-celda">
-                                <a href="index.php?modulo=membresias&accion=formulario&id=<?php echo $plan['idplan']; ?>" 
-                                   class="boton-accion boton-editar">Editar</a>
+                                <a href="index.php?modulo=membresias&accion=editar&id=<?php echo $plan['idplan']; ?>" 
+                                    class="boton-accion boton-editar">Editar</a>
                                 <button onclick="cambiarEstado(<?php echo $plan['idplan']; ?>, '<?php echo $plan['estado']; ?>')" 
                                         class="boton-accion boton-<?php echo ($plan['estado'] == 'Activo') ? 'eliminar' : 'activar'; ?>">
                                     <?php echo ($plan['estado'] == 'Activo') ? 'Desactivar' : 'Activar'; ?>
@@ -71,16 +71,58 @@ require_once __DIR__ . '/../../layouts/header.php';
 </div>
 
 <script>
-function cambiarEstado(idplan, estadoActual) {
-    const nuevoEstado = (estadoActual === 'Activo') ? 'Inactivo' : 'Activo';
-    const mensaje = (estadoActual === 'Activo') 
-        ? '¿Desea desactivar este plan? Los socios con este plan no se verán afectados.' 
-        : '¿Desea activar este plan?';
-    
-    if (confirm(mensaje)) {
-        window.location.href = 'index.php?modulo=membresias&accion=cambiarEstado&id=' + idplan + '&estado=' + nuevoEstado;
+    /**
+     * Cambia el estado de un plan usando AJAX (Fetch)
+     */
+    async function cambiarEstado(idplan, estadoActual) {
+        const nuevoEstado = (estadoActual === 'Activo') ? 'Inactivo' : 'Activo';
+        const mensaje = (estadoActual === 'Activo') 
+            ? '¿Desea desactivar este plan? Los socios con este plan no se verán afectados.' 
+            : '¿Desea activar este plan?';
+        
+        if (!confirm(mensaje)) {
+            return; // El usuario canceló
+        }
+
+        // Apuntamos a la nueva acción que creamos en index.php
+        const url = `index.php?modulo=membresias&accion=cambiarEstado&id=${idplan}&estado=${nuevoEstado}`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET', // Coincide con $_GET en el controlador
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // Para la sesión
+                },
+                credentials: 'same-origin'
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert('Sesión expirada. Redirigiendo al login...');
+                    window.location.href = 'index.php?modulo=seguridad&accion=login';
+                } else {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                return;
+            }
+
+            // Leemos el JSON que envía el controlador
+            const data = await response.json();
+
+            // ¡Y aquí está la lógica que querías!
+            if (data.success) {
+                alert(data.message); // Muestra el mensajito
+                location.reload(); // Recarga la página
+            } else {
+                alert('Error: ' + data.message);
+            }
+
+        } catch (error) {
+            console.error('Error al cambiar estado:', error);
+            alert('Error de conexión.');
+        }
     }
-}
 </script>
 
 <?php require_once __DIR__ . '/../../layouts/footer.php'; ?>

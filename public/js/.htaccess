@@ -1,0 +1,17 @@
+# Configurar el tipo MIME correcto para archivos JavaScript
+<FilesMatch "\.js$">
+    ForceType application/javascript
+    Header set Content-Type application/javascript
+</FilesMatch>
+
+# Permitir acceso a archivos JavaScript
+<Files ~ "\.js$">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Denegar acceso directo a este archivo .htaccess
+<Files .htaccess>
+    Order Allow,Deny
+    Deny from all
+</Files>

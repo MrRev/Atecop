@@ -34,8 +34,8 @@ class ControladorCurso {
     /**
      * Mostrar formulario de registro/edición
      */
-    public function formulario() {
-        $idcurso = $_GET['id'] ?? null;
+    public function mostrarFormulario($id = null) { // <-- ¡NOMBRE CAMBIADO Y AÑADIDO $id!
+        $idcurso = $id ?? $_GET['id'] ?? null; // <-- Lógica mejorada para aceptar el $id
         $curso = null;
         
         if ($idcurso) {
@@ -121,24 +121,28 @@ class ControladorCurso {
      */
     public function gestionarInscripciones() {
         $idcurso = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        
+
         if (!$idcurso) {
             $_SESSION['error'] = "Debe especificar un curso";
             header("Location: index.php?modulo=cursos&accion=listar");
             exit;
         }
-        
+
         $curso = $this->cursoDAO->readCurso($idcurso);
         $inscritos = $this->cursoInscritoDAO->getInscritosPorCurso($idcurso);
         $cuposDisponibles = $this->cursoDAO->getCuposDisponibles($idcurso);
-        
-        // Para búsqueda de socios
+
+        $ponente = null;
+        if ($curso && $curso->getIdponente()) {
+            $ponente = $this->ponenteDAO->readPonente($curso->getIdponente());
+        }
+
         $busqueda = $_GET['busqueda'] ?? '';
         $socios = [];
         if (!empty($busqueda)) {
             $socios = $this->socioDAO->findSocios($busqueda);
         }
-        
+
         require_once __DIR__ . '/../vistas/VistaGestionInscripciones.php';
     }
 
@@ -146,14 +150,10 @@ class ControladorCurso {
      * Inscribir un socio a un curso
      */
     public function inscribir() {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header("Location: index.php?modulo=cursos&accion=listar");
-            exit;
-        }
-
         try {
-            $idsocio = filter_input(INPUT_POST, 'idsocio', FILTER_VALIDATE_INT);
-            $idcurso = filter_input(INPUT_POST, 'idcurso', FILTER_VALIDATE_INT);
+            // Leemos desde $_GET en lugar de $_POST
+            $idsocio = filter_input(INPUT_GET, 'idsocio', FILTER_VALIDATE_INT);
+            $idcurso = filter_input(INPUT_GET, 'idcurso', FILTER_VALIDATE_INT);
 
             if (!$idsocio || !$idcurso) {
                 throw new Exception("Datos incompletos");
@@ -216,5 +216,65 @@ class ControladorCurso {
 
         header("Location: index.php?modulo=cursos&accion=gestionarInscripciones&id=" . $idcurso);
         exit;
+    }
+
+    /**
+     * Exportar la lista de inscritos a CSV
+     */
+    public function exportarInscritos($idcurso = null) {
+        if ($idcurso === null) {
+            $_SESSION['error'] = "ID de curso no válido";
+            header("Location: index.php?modulo=cursos&accion=listar");
+            exit;
+        }
+        try {
+            // 1. Obtener datos
+            $curso = $this->cursoDAO->readCurso($idcurso);
+            $inscritos = $this->cursoInscritoDAO->getInscritosPorCurso($idcurso);
+            if (!$curso) {
+                throw new Exception("Curso no encontrado");
+            }
+
+            // 2. Definir nombre del archivo (ej: Inscritos_Gestion_de_Proyectos.csv)
+            $nombreArchivo = 'Inscritos_' . preg_replace('/[^a-z0-9_]+/', '_', strtolower($curso->getNombrecurso())) . '.csv';
+
+            // 3. Configurar cabeceras HTTP para descarga
+            header('Content-Type: text/csv; charset=utf-8');
+            header('Content-Disposition: attachment; filename="' . $nombreArchivo . '"');
+
+            // 4. Abrir el "archivo" de salida de PHP
+            $output = fopen('php://output', 'w');
+
+            // 5. Escribir la cabecera del CSV
+            fputcsv($output, [
+                'DNI',
+                'Nombre Completo',
+                'Email',
+                'Telefono',
+                'Fecha Inscripcion',
+                'Estado Pago'
+            ]);
+
+            // 6. Escribir los datos
+            if (count($inscritos) > 0) {
+                foreach ($inscritos as $inscrito) {
+                    fputcsv($output, [
+                        $inscrito['dni'],
+                        $inscrito['nombrecompleto'],
+                        $inscrito['email'],
+                        $inscrito['telefono'],
+                        date('d/m/Y H:i', strtotime($inscrito['fechainscripcion'])),
+                        $inscrito['estadopagocurso']
+                    ]);
+                }
+            }
+
+            fclose($output);
+            exit; // Detener el script después de enviar el archivo
+        } catch (Exception $e) {
+            $_SESSION['error'] = "Error al exportar: " . $e->getMessage();
+            header("Location: index.php?modulo=cursos&accion=inscripciones&id=" . $idcurso);
+            exit;
+        }
     }
 }

@@ -1,0 +1,163 @@
+[01-Nov-2025 17:30:28 America/Lima] PHP Warning:  Constant ENVIRONMENT already defined in C:\xampp\htdocs\lolo\config\config.php on line 82
+[01-Nov-2025 17:30:28 America/Lima] PHP Warning:  Constant ENVIRONMENT already defined in C:\xampp\htdocs\lolo\config\config.php on line 82
+[01-Nov-2025 17:30:28 America/Lima] PHP Warning:  Constant ENVIRONMENT already defined in C:\xampp\htdocs\lolo\config\config.php on line 82
+[01-Nov-2025 17:30:28 America/Lima] PHP Warning:  Constant ENVIRONMENT already defined in C:\xampp\htdocs\lolo\config\config.php on line 82
+[01-Nov-2025 17:31:31 America/Lima] Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:31:38 America/Lima] Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:31:49 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:31:49 America/Lima] GET termino = MAURO
+[01-Nov-2025 17:31:49 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:31:49 America/Lima] Criterio recibido: MAURO
+[01-Nov-2025 17:31:49 America/Lima] ❌ Error en SocioDAO::findSocios - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:37:58 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:37:58 America/Lima] GET termino = MAURO
+[01-Nov-2025 17:37:58 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:37:58 America/Lima] Criterio recibido: MAURO
+[01-Nov-2025 17:37:58 America/Lima] ❌ Error en SocioDAO::findSocios - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:38:18 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:38:18 America/Lima] GET termino = MAURO
+[01-Nov-2025 17:38:18 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:38:18 America/Lima] Criterio recibido: MAURO
+[01-Nov-2025 17:38:18 America/Lima] ❌ Error en SocioDAO::findSocios - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:38:19 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:38:19 America/Lima] GET termino = MAURO
+[01-Nov-2025 17:38:19 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:38:19 America/Lima] Criterio recibido: MAURO
+[01-Nov-2025 17:38:19 America/Lima] ❌ Error en SocioDAO::findSocios - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:38:19 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:38:19 America/Lima] GET termino = MAURO
+[01-Nov-2025 17:38:19 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:38:19 America/Lima] Criterio recibido: MAURO
+[01-Nov-2025 17:38:19 America/Lima] ❌ Error en SocioDAO::findSocios - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:39:38 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:39:38 America/Lima] GET termino = MAURO
+[01-Nov-2025 17:39:38 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:39:38 America/Lima] Criterio recibido: MAURO
+[01-Nov-2025 17:39:38 America/Lima] findSocios devolvió 1 resultados.
+[01-Nov-2025 17:40:01 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 2
+[01-Nov-2025 17:40:05 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:42:20 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:42:33 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:42:34 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:42:34 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:42:35 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:42:36 America/Lima] ❌ Error en SocioDAO::listarFiltrado - SQLSTATE[HY093]: Invalid parameter number
+[01-Nov-2025 17:44:19 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 1
+[01-Nov-2025 17:44:21 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 1
+[01-Nov-2025 17:44:27 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 1
+[01-Nov-2025 17:44:36 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:44:36 America/Lima] GET termino = 72189592
+[01-Nov-2025 17:44:36 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:44:36 America/Lima] Criterio recibido: 72189592
+[01-Nov-2025 17:44:36 America/Lima] findSocios devolvió 1 resultados.
+[01-Nov-2025 17:44:39 America/Lima] PHP Fatal error:  Uncaught Error: Call to undefined method ControladorCurso::inscribirSocio() in C:\xampp\htdocs\lolo\index.php:214
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\lolo\index.php on line 214
+[01-Nov-2025 17:46:34 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:46:34 America/Lima] GET termino = 72189592
+[01-Nov-2025 17:46:34 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:46:34 America/Lima] Criterio recibido: 72189592
+[01-Nov-2025 17:46:34 America/Lima] findSocios devolvió 1 resultados.
+[01-Nov-2025 17:46:43 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 2
+[01-Nov-2025 17:47:13 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 2
+[01-Nov-2025 17:47:22 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:47:22 America/Lima] GET termino = 72189592
+[01-Nov-2025 17:47:22 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:47:22 America/Lima] Criterio recibido: 72189592
+[01-Nov-2025 17:47:22 America/Lima] findSocios devolvió 1 resultados.
+[01-Nov-2025 17:47:59 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:47:59 America/Lima] GET termino = 72189592
+[01-Nov-2025 17:47:59 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:47:59 America/Lima] Criterio recibido: 72189592
+[01-Nov-2025 17:47:59 America/Lima] findSocios devolvió 1 resultados.
+[01-Nov-2025 17:49:09 America/Lima] PHP Fatal error:  Uncaught Error: Cannot use object of type Curso as array in C:\xampp\htdocs\lolo\modulos\cursos\vistas\VistaFormCurso.php:26
+Stack trace:
+#0 C:\xampp\htdocs\lolo\modulos\cursos\controladores\ControladorCurso.php(52): require_once()
+#1 C:\xampp\htdocs\lolo\index.php(207): ControladorCurso->mostrarFormulario('1')
+#2 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\cursos\vistas\VistaFormCurso.php on line 26
+[01-Nov-2025 17:51:27 America/Lima] === DEBUG buscarSocios ===
+[01-Nov-2025 17:51:27 America/Lima] GET termino = 72189592
+[01-Nov-2025 17:51:27 America/Lima] === DEBUG findSocios ===
+[01-Nov-2025 17:51:27 America/Lima] Criterio recibido: 72189592
+[01-Nov-2025 17:51:27 America/Lima] findSocios devolvió 1 resultados.
+[01-Nov-2025 18:00:04 America/Lima] ✅ listarFiltrado ejecutado correctamente. Resultados: 2
+[01-Nov-2025 18:05:11 America/Lima] PHP Fatal error:  Uncaught Error: Call to undefined method ControladorReporte::reporteMorosos() in C:\xampp\htdocs\lolo\index.php:234
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\lolo\index.php on line 234
+[01-Nov-2025 18:05:15 America/Lima] PHP Fatal error:  Uncaught Error: Call to undefined method ControladorReporte::reporteMorosos() in C:\xampp\htdocs\lolo\index.php:234
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\lolo\index.php on line 234
+[01-Nov-2025 18:05:17 America/Lima] PHP Fatal error:  Uncaught Error: Call to undefined method ControladorReporte::reporteMorosos() in C:\xampp\htdocs\lolo\index.php:234
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\lolo\index.php on line 234
+[01-Nov-2025 18:07:37 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosMorosos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 44
+[01-Nov-2025 18:07:37 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosMorosos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:44
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(234): ControladorReporte->reporteMorosos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 44
+[01-Nov-2025 18:07:40 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosMorosos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 44
+[01-Nov-2025 18:07:40 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosMorosos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:44
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(234): ControladorReporte->reporteMorosos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 44
+[01-Nov-2025 18:07:57 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosMorosos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 44
+[01-Nov-2025 18:07:57 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosMorosos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:44
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(234): ControladorReporte->reporteMorosos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 44
+[01-Nov-2025 18:10:41 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:10:41 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:68
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(237): ControladorReporte->reporteVencimientos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:10:43 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:10:43 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:68
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(237): ControladorReporte->reporteVencimientos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:10:45 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:10:45 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:68
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(237): ControladorReporte->reporteVencimientos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:10:49 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteDetalleSocio.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 102
+[01-Nov-2025 18:10:49 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteDetalleSocio.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:102
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(241): ControladorReporte->reporteSocio('1')
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 102
+[01-Nov-2025 18:10:51 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteDetalleSocio.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 102
+[01-Nov-2025 18:10:51 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteDetalleSocio.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:102
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(241): ControladorReporte->reporteSocio('1')
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 102
+[01-Nov-2025 18:10:54 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosInhabilitar.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 126
+[01-Nov-2025 18:10:54 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosInhabilitar.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:126
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(244): ControladorReporte->reporteInhabilitar()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 126
+[01-Nov-2025 18:10:59 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosInhabilitar.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 126
+[01-Nov-2025 18:10:59 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteSociosInhabilitar.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:126
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(244): ControladorReporte->reporteInhabilitar()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 126
+[01-Nov-2025 18:11:05 America/Lima] PHP Warning:  require_once(C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68
+[01-Nov-2025 18:11:05 America/Lima] PHP Fatal error:  Uncaught Error: Failed opening required 'C:\xampp\htdocs\lolo\modulos\reportes\controladores/../vistas/VistaReporteProximosVencimientos.php' (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php:68
+Stack trace:
+#0 C:\xampp\htdocs\lolo\index.php(237): ControladorReporte->reporteVencimientos()
+#1 {main}
+  thrown in C:\xampp\htdocs\lolo\modulos\reportes\controladores\ControladorReporte.php on line 68

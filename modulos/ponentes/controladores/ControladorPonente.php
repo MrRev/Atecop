@@ -54,13 +54,13 @@ class ControladorPonente {
         require_once __DIR__ . '/../vistas/VistaFormPonente.php';
     }
 
-    /**
+    /** 
      * Validar DNI con API externa
+     * --- VERSIÓN CORREGIDA ---
      */
     public function validarDni() {
         header('Content-Type: application/json');
 
-        // Aceptar GET o POST
         $dni = $_GET['dni'] ?? $_POST['dni'] ?? '';
 
         if (empty($dni) || strlen($dni) != 8) {
@@ -69,17 +69,25 @@ class ControladorPonente {
         }
 
         try {
+            // 1. Llamamos al adaptador
             $datos = $this->apiPeruDev->consultarDNI($dni);
 
+            // 2. Verificamos la respuesta del adaptador
             if (isset($datos['success']) && $datos['success']) {
-                $d = $datos['data'] ?? [];
-                $nombre = $d['nombre_completo'] ?? $d['nombres'] ?? '';
-                $direccion = $d['direccion'] ?? '';
+                
+                // 3. Leemos las claves 'nombre' y 'direccion' que el adaptador preparó
+                $nombre = $datos['data']['nombre'] ?? '';
+                $direccion = $datos['data']['direccion'] ?? '';
+                
+                // 4. Enviamos el JSON
                 echo json_encode(['success' => true, 'nombre' => $nombre, 'direccion' => $direccion]);
+            
             } else {
+                // Si el adaptador falló (ej. DNI no encontrado)
                 $msg = $datos['message'] ?? $datos['mensaje'] ?? 'DNI no encontrado';
                 echo json_encode(['success' => false, 'message' => $msg]);
             }
+
         } catch (Exception $e) {
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
         }

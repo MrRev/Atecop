@@ -5,6 +5,7 @@ require_once __DIR__ . '/../dao/TipoSocioDAO.php';
 require_once __DIR__ . '/../dao/ProfesionDAO.php';
 require_once __DIR__ . '/../../../util_global/ApiPeruDev.php';
 require_once __DIR__ . '/../../membresias/dao/PlanMembresiaDAO.php';
+require_once __DIR__ . '/../../../util_global/SessionManager.php';
 
 /**
  * Controlador: ControladorSocio
@@ -26,11 +27,76 @@ class ControladorSocio {
     }
 
     /**
-     * Listar todos los socios
+     * Listar todos los socios (CON FILTROS)
      */
     public function listar(): void {
-        $socios = $this->socioDAO->listAll();
+        // 1. Lee los filtros de la URL (del formulario GET)
+        $buscar = $_GET['buscar'] ?? null;
+        $estado = $_GET['estado'] ?? null;
+
+        // 2. ¡Llama a la nueva función "listarFiltrado"!
+        //    (Aquí estaba el error, antes decía listAll())
+        $socios = $this->socioDAO->listarFiltrado($buscar, $estado);
+
+        // 3. Carga la vista
         require_once __DIR__ . '/../vistas/VistaListarSocios.php';
+    }
+    /**
+     * Validar DNI/RUC con API
+     */
+    public function validarDocumento(): void {
+        header('Content-Type: application/json');
+        
+        SessionManager::checkSession();
+        
+        if (!isset($_GET['documento']) || !isset($_GET['tipo'])) {
+            echo json_encode(['success' => false, 'mensaje' => 'Faltan parámetros requeridos']);
+            exit;
+        }
+
+        $documento = trim($_GET['documento']);
+        $tipo = $_GET['tipo'];
+        
+        try {
+            if (!defined('API_PERUDEV_TOKEN') || empty(API_PERUDEV_TOKEN)) {
+                throw new Exception('Token de API no configurado');
+            }
+            
+            $resultado = null;
+            
+            if ($tipo === 'dni') {
+                $resultado = $this->apiPeruDev->consultarDNI($documento);
+            } else if ($tipo === 'ruc') {
+                $resultado = $this->apiPeruDev->consultarRUC($documento);
+            } else {
+                throw new Exception('Tipo de documento no válido');
+            }
+            
+            if ($resultado && $resultado['success'] && isset($resultado['data'])) {
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'nombre'    => $resultado['data']['nombre'] ?? $resultado['data']['razonSocial'] ?? '',
+                        'direccion' => $resultado['data']['direccion'] ?? ''
+                    ]
+                ]);
+                exit;
+            }
+            
+            echo json_encode([
+                'success' => false,
+                'mensaje' => $resultado['message'] ?? 'No se encontraron datos'
+            ]);
+            exit;
+
+        } catch (Exception $e) {
+            error_log("Error en validación de documento: " . $e->getMessage());
+            echo json_encode([
+                'success' => false,
+                'mensaje' => 'Error al validar el documento: ' . $e->getMessage()
+            ]);
+            exit; 
+        }
     }
 
     /**
@@ -40,7 +106,7 @@ class ControladorSocio {
         $socio = null;
         $tiposSocio = $this->tipoSocioDAO->listAll();
         $profesiones = $this->profesionDAO->listAll();
-        $planes = $this->planDAO->listAll();
+        $planes = $this->planDAO->listActivos();
 
         if ($id !== null) {
             $socio = $this->socioDAO->read((int)$id);
@@ -137,7 +203,13 @@ class ControladorSocio {
             // Actualizar
             $socio->setIdsocio((int)$_POST['idsocio']);
             $resultado = $this->socioDAO->update($socio);
-            $mensaje = $resultado ? 'Socio actualizado correctamente' : 'Error al actualizar socio';
+            if ($resultado) {
+                $_SESSION['success'] = 'Socio actualizado correctamente';
+                header('Location: index.php?modulo=socios&accion=listar');
+            exit;
+            } else {
+                throw new Exception('Error al actualizar el socio');
+            }
         } else {
             // Crear
             $resultado = $this->socioDAO->create($socio);
@@ -202,26 +274,54 @@ class ControladorSocio {
         if ($socio->getIdplan()) {
             $plan = $this->planDAO->read($socio->getIdplan());
         }
-
+        $planes = $this->planDAO->listActivos();
+        
         require_once __DIR__ . '/../vistas/VistaPerfilSocio.php';
     }
 
     /**
      * Dar de baja a un socio
+     * --- VERSIÓN CORREGIDA ---
      */
-    public function darDeBaja(): void {
-        if (!isset($_POST['id'])) {
-            echo json_encode(['success' => false, 'message' => 'ID no proporcionado']);
-            return;
+    public function darDeBaja(?int $id = null): void {
+        // Establecer el header al inicio para todas las respuestas
+        header('Content-Type: application/json');
+
+        // Validamos el ID que recibimos como argumento
+        if ($id === null || $id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'ID no proporcionado o inválido']);
+            exit; // Usamos exit; para detener la ejecución
         }
 
-        $resultado = $this->socioDAO->darDeBaja((int)$_POST['id']);
+        // Usamos el $id del argumento, no $_POST
+        $resultado = $this->socioDAO->darDeBaja($id);
         
-        header('Content-Type: application/json');
         echo json_encode([
             'success' => $resultado,
             'message' => $resultado ? 'Socio dado de baja correctamente' : 'Error al dar de baja al socio'
         ]);
+        exit; // Usamos exit;
+    }
+
+    /**
+     * Reactivar a un socio
+     */
+    public function reactivar(?int $id = null): void {
+        header('Content-Type: application/json');
+
+        if ($id === null || $id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'ID no proporcionado o inválido']);
+            exit;
+        }
+
+        // Usamos la nueva función del DAO que ya creaste
+        $resultado = $this->socioDAO->reactivar($id); 
+        
+        echo json_encode([
+            'success' => $resultado,
+            'message' => $resultado ? 'Socio reactivado correctamente' : 'Error al reactivar al socio'
+        ]);
+        exit;
     }
 
     /**
@@ -255,5 +355,46 @@ class ControladorSocio {
             : 'Error al asignar plan';
 
         header('Location: index.php?modulo=socios&accion=perfil&id=' . $idsocio);
+    }
+    /**
+     * Busca socios por DNI o nombre (para AJAX de inscripciones)
+     */
+    public function buscar(): void {
+        error_log("=== DEBUG buscarSocios ===");
+        error_log("GET termino = " . ($_GET['termino'] ?? 'NO_LLEGA'));
+
+        header('Content-Type: application/json');
+        SessionManager::checkSession(); // Importante para AJAX
+
+        $termino = $_GET['termino'] ?? '';
+
+        if (strlen($termino) < 3) {
+            echo json_encode([]); // Devuelve array vacío
+            exit;
+        }
+
+        try {
+            // 1. Llama a la función del DAO (que ya está correcta)
+            $socios = $this->socioDAO->findSocios($termino); 
+            
+            // 2. Convierte los OBJETOS a ARRAYS para el JSON
+            $sociosArray = [];
+            foreach ($socios as $socio) {
+                $sociosArray[] = [
+                    'idsocio' => $socio->getIdsocio(),
+                    'dni' => $socio->getDni(),
+                    'nombrecompleto' => $socio->getNombrecompleto(),
+                    'email' => $socio->getEmail(),
+                    'estado' => $socio->getEstado()
+                ];
+            }
+            
+            echo json_encode($sociosArray);
+            
+        } catch (Exception $e) {
+            error_log("Error en ControladorSocio::buscar - " . $e->getMessage());
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+        exit;
     }
 }

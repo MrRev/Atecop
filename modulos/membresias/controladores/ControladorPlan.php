@@ -22,13 +22,13 @@ class ControladorPlan {
     }
 
     /**
-     * Mostrar formulario para crear/editar plan
+     * Mostrar para crear/editar plan
      */
-    public function formulario(): void {
+    public function mostrarFormulario($id = null): void {
         $plan = null;
         
-        if (isset($_GET['id'])) {
-            $plan = $this->planDAO->read((int)$_GET['id']);
+        if ($id !== null) {
+            $plan = $this->planDAO->read((int)$id);
         }
         
         require_once __DIR__ . '/../vistas/VistaFormPlan.php';
@@ -68,5 +68,29 @@ class ControladorPlan {
 
         $_SESSION[$resultado ? 'success' : 'error'] = $mensaje;
         header('Location: index.php?modulo=membresias&accion=listar');
+    }
+    /**
+     * Cambia el estado de un plan (para AJAX)
+     */
+    public function cambiarEstado(): void {
+        header('Content-Type: application/json');
+        
+        // Leemos los parámetros de la URL
+        $id = $_GET['id'] ?? null;
+        $estado = $_GET['estado'] ?? null;
+
+        if ($id === null || $estado === null) {
+            echo json_encode(['success' => false, 'message' => 'Faltan parámetros ID o estado']);
+            exit;
+        }
+
+        // Llamamos a la nueva función del DAO que acabamos de crear
+        $resultado = $this->planDAO->cambiarEstado((int)$id, $estado);
+        
+        echo json_encode([
+            'success' => $resultado,
+            'message' => $resultado ? 'Estado del plan actualizado correctamente' : 'Error al actualizar el estado'
+        ]);
+        exit;
     }
 }

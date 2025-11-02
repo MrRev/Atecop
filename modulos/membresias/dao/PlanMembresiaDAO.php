@@ -106,4 +106,26 @@ class PlanMembresiaDAO {
             return [];
         }
     }
+    /**
+     * Cambia el estado (Activo/Inactivo) de un plan
+     */
+    public function cambiarEstado(int $idplan, string $nuevoEstado): bool {
+        try {
+            // Validar que el estado sea solo Activo o Inactivo
+            if (!in_array($nuevoEstado, ['Activo', 'Inactivo'])) {
+                throw new Exception("Estado no válido");
+            }
+
+            $sql = "UPDATE planmembresia SET estado = :estado WHERE idplan = :idplan";
+            
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindValue(':estado', $nuevoEstado);
+            $stmt->bindValue(':idplan', $idplan, PDO::PARAM_INT);
+            
+            return $stmt->execute();
+        } catch (Exception $e) {
+            error_log("Error en PlanMembresiaDAO::cambiarEstado - " . $e->getMessage());
+            return false;
+        }
+    }
 }

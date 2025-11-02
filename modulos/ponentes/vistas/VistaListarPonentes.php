@@ -53,8 +53,8 @@ require_once __DIR__ . '/../../layouts/header.php';
                                 </span>
                             </td>
                             <td class="acciones-celda">
-                                <a href="index.php?modulo=ponentes&accion=formulario&id=<?php echo $ponente['idponente']; ?>" 
-                                   class="boton-accion boton-editar">Editar</a>
+                                <a href="index.php?modulo=ponentes&accion=editar&id=<?php echo $ponente['idponente']; ?>" 
+                                        class="boton-accion boton-editar">Editar</a>
                                 <button onclick="cambiarEstado(<?php echo $ponente['idponente']; ?>, '<?php echo $ponente['estado']; ?>')" 
                                         class="boton-accion boton-<?php echo ($ponente['estado'] == 'Activo') ? 'eliminar' : 'activar'; ?>">
                                     <?php echo ($ponente['estado'] == 'Activo') ? 'Desactivar' : 'Activar'; ?>

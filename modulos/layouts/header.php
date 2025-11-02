@@ -1,11 +1,6 @@
 <?php
-if (!isset($_SESSION)) {
-    session_start();
-}
-if (!isset($_SESSION['idadmin'])) {
-    header('Location: ' . BASE_URL . '/index.php?modulo=seguridad&accion=login');
-    exit;
-}
+require_once __DIR__ . '/../../util_global/SessionManager.php';
+SessionManager::checkSession();
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,8 +12,8 @@ if (!isset($_SESSION['idadmin'])) {
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/bootstrap.css">
     <link rel="stylesheet" href="<?php echo BASE_URL; ?>/public/css/estilos.css">
     <!-- Scripts -->
-    <script src="<?php echo BASE_URL; ?>/public/js/scripts.js" defer></script>
-    <script src="<?php echo BASE_URL; ?>/public/js/validaciones.js" defer></script>
+    <script type="text/javascript" src="/lolo/public/js/validaciones.js"></script>
+    <script type="text/javascript" src="/lolo/public/js/scripts.js"></script>
     <style>
         body {
             display: flex;

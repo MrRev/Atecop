@@ -94,12 +94,23 @@ try {
                     $id = $_GET['id'] ?? null;
                     $controlador->darDeBaja($id);
                     break;
-                case 'validarDNI':
-                    $controlador->validarDNI();
+                case 'reactivar':
+                    $id = $_GET['id'] ?? null;
+                    $controlador->reactivar($id);
+                break;
+                case 'validarDocumento':
+                    $controlador->validarDocumento(); 
                     break;
+                case 'asignarPlan':
+                    $controlador->asignarPlan();
+                break;
+                case 'buscar':
+                    $controlador->buscar();
+                break;
                 default:
-                    $controlador->listar();
-            }
+                // ...
+                        $controlador->listar();
+                }
             break;
             
         case 'membresias':
@@ -120,6 +131,9 @@ try {
                     $id = $_GET['id'] ?? null;
                     $controlador->mostrarFormulario($id);
                     break;
+                case 'cambiarEstado':
+                    $controlador->cambiarEstado();
+                break;
                 default:
                     $controlador->listar();
             }
@@ -197,7 +211,11 @@ try {
                     $controlador->gestionarInscripciones($id);
                     break;
                 case 'inscribir':
-                    $controlador->inscribirSocio();
+                    $controlador->inscribir();
+                    break;
+                case 'exportarInscritos':
+                    $id = $_GET['id'] ?? null;
+                    $controlador->exportarInscritos($id);
                     break;
                 default:
                     $controlador->listar();

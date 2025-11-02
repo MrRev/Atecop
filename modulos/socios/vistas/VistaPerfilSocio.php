@@ -80,8 +80,6 @@ require_once __DIR__ . '/../../layouts/header.php';
     <div class="tarjeta-perfil">
         <div class="encabezado-tarjeta">
             <h2>Membresía</h2>
-                <a href="index.php?modulo=socios&accion=asignarPlan&id=<?php echo $socio->getIdsocio(); ?>" 
-               class="boton-pequeno">Cambiar Plan</a>
         </div>
         
         <div class="contenido-tarjeta">

@@ -24,8 +24,9 @@ class ControladorReporte {
 
     /**
      * Genera reporte de socios morosos
+     * CORRECCIÓN: Renombrada a 'reporteMorosos' para coincidir con index.php
      */
-    public function reporteSociosMorosos() {
+    public function reporteMorosos() {
         $formato = $_GET['formato'] ?? 'html';
         $datos = $this->reporteDAO->getSociosMorosos();
 
@@ -39,14 +40,16 @@ class ControladorReporte {
                 $excel->generarReporteSociosMorosos($datos);
                 break;
             default:
+                // Pasamos los datos a la vista
                 require_once __DIR__ . '/../vistas/VistaReporteSociosMorosos.php';
         }
     }
 
     /**
      * Genera reporte de próximos vencimientos
+     * CORRECCIÓN: Renombrada a 'reporteVencimientos' para coincidir con index.php
      */
-    public function reporteProximosVencimientos() {
+    public function reporteVencimientos() {
         $formato = $_GET['formato'] ?? 'html';
         $dias = $_GET['dias'] ?? 30;
         $datos = $this->reporteDAO->getProximosVencimientos($dias);
@@ -61,26 +64,31 @@ class ControladorReporte {
                 $excel->generarReporteProximosVencimientos($datos, $dias);
                 break;
             default:
+                // Pasamos los datos y días a la vista
                 require_once __DIR__ . '/../vistas/VistaReporteProximosVencimientos.php';
         }
     }
 
     /**
      * Genera reporte detallado de un socio
+     * CORRECCIÓN: Renombrada a 'reporteSocio' y se lee $_GET['id']
      */
-    public function reporteDetalleSocio() {
-        $idsocio = $_GET['idsocio'] ?? null;
+    public function reporteSocio() {
+        // La vista (que corregimos) envía 'id', no 'idsocio'
+        $idsocio = $_GET['id'] ?? null; 
         $formato = $_GET['formato'] ?? 'html';
 
         if (!$idsocio) {
-            header('Location: index.php?modulo=reportes&accion=menu&error=socio_requerido');
+            $_SESSION['error_reporte'] = 'ID de socio requerido';
+            header('Location: index.php?modulo=reportes&accion=menu');
             exit;
         }
 
         $datos = $this->reporteDAO->getDatosCompletosSocio($idsocio);
 
         if (!$datos) {
-            header('Location: index.php?modulo=reportes&accion=menu&error=socio_no_encontrado');
+            $_SESSION['error_reporte'] = 'Socio no encontrado con ID ' . $idsocio;
+            header('Location: index.php?modulo=reportes&accion=menu');
             exit;
         }
 
@@ -90,14 +98,16 @@ class ControladorReporte {
                 $pdf->generarReporteDetalleSocio($datos);
                 break;
             default:
+                // Pasamos los datos a la vista
                 require_once __DIR__ . '/../vistas/VistaReporteDetalleSocio.php';
         }
     }
 
     /**
      * Genera reporte de socios para inhabilitar
+     * CORRECCIÓN: Renombrada a 'reporteInhabilitar' para coincidir con index.php
      */
-    public function reporteSociosInhabilitar() {
+    public function reporteInhabilitar() {
         $formato = $_GET['formato'] ?? 'html';
         $diasMora = $_GET['dias_mora'] ?? 60;
         $datos = $this->reporteDAO->getSociosParaInhabilitar($diasMora);
@@ -112,6 +122,7 @@ class ControladorReporte {
                 $excel->generarReporteSociosInhabilitar($datos, $diasMora);
                 break;
             default:
+                // Pasamos los datos y días a la vista
                 require_once __DIR__ . '/../vistas/VistaReporteSociosInhabilitar.php';
         }
     }

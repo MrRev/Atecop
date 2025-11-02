@@ -33,8 +33,24 @@ class ApiPeruDev {
             return ['success' => false, 'message' => 'DNI inválido. Debe tener 8 dígitos.'];
         }
 
-        // La API espera POST JSON a /dni con { "dni": "..." }
-        return $this->realizarConsulta('/dni', ['dni' => $dni]);
+        $result = $this->realizarConsulta("/dni/$dni");
+        
+        if (isset($result['success']) && $result['success']) {
+            return [
+                'success' => true,
+                'data' => [
+                    'nombre' => $result['data']['nombres'] . ' ' . 
+                              $result['data']['apellido_paterno'] . ' ' . 
+                              $result['data']['apellido_materno'],
+                    'direccion' => $result['data']['direccion'] ?? ''
+                ]
+            ];
+        }
+        
+        return [
+            'success' => false,
+            'message' => $result['message'] ?? 'Error al consultar el DNI'
+        ];
     }
     
     /**
@@ -88,15 +104,16 @@ class ApiPeruDev {
 
             $headers = [
                 'Accept: application/json',
-                'Content-Type: application/json',
+                'Content-Type: application/json', 
                 'Authorization: Bearer ' . $this->apiKey
             ];
 
             $options = [
                 CURLOPT_URL => $url,
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_TIMEOUT => 10,
+                CURLOPT_TIMEOUT => 30,
                 CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_SSL_VERIFYPEER => true,
             ];
 
             if ($payload !== null) {

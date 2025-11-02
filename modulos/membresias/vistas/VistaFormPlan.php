@@ -1,11 +1,4 @@
 <?php
-// Verificar sesión
-session_start();
-if (!isset($_SESSION['idadmin'])) {
-    header('Location: index.php?modulo=seguridad&accion=login');
-    exit;
-}
-
 $esEdicion = isset($plan) && $plan != null;
 $titulo = $esEdicion ? 'Editar Plan de Membresía' : 'Crear Nuevo Plan';
 
@@ -26,8 +19,8 @@ require_once __DIR__ . '/../../layouts/header.php';
         </div>
     <?php endif; ?>
 
-    <form method="POST" action="index.php?modulo=membresias&accion=<?php echo $esEdicion ? 'modificar' : 'crear'; ?>" 
-          class="formulario-principal" id="formPlan">
+    <form method="POST" action="index.php?modulo=membresias&accion=guardar" 
+        class="formulario-principal" id="formPlan">
         
         <?php if ($esEdicion): ?>
             <input type="hidden" name="idplan" value="<?php echo $plan['idplan']; ?>">

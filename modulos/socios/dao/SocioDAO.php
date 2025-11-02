@@ -163,35 +163,99 @@ class SocioDAO {
             return [];
         }
     }
-
     /**
-     * Buscar socios por criterios (DNI o nombre)
+     * Listar socios con filtros opcionales
      */
-    public function findSocios(string $criterio): array {
+    public function listarFiltrado(?string $buscar, ?string $estado): array {
         try {
             $sql = "SELECT s.*, ts.nombretipo, pm.nombreplan, p.nombreprofesion 
                     FROM socio s
                     LEFT JOIN tiposocio ts ON s.idtiposocio = ts.idtiposocio
                     LEFT JOIN planmembresia pm ON s.idplan = pm.idplan
-                    LEFT JOIN profesion p ON s.idprofesion = p.idprofesion
-                    WHERE s.dni LIKE :criterio OR s.nombrecompleto LIKE :criterio
-                    ORDER BY s.nombrecompleto ASC";
-            
+                    LEFT JOIN profesion p ON s.idprofesion = p.idprofesion";
+
+            $params = [];
+            $whereClauses = [];
+
+            // ✅ Filtro por nombre o DNI (usar nombres distintos para los parámetros)
+            if (!empty($buscar)) {
+                $whereClauses[] = "(s.dni LIKE :buscarDni OR s.nombrecompleto LIKE :buscarNombre)";
+                $params[':buscarDni'] = '%' . $buscar . '%';
+                $params[':buscarNombre'] = '%' . $buscar . '%';
+            }
+
+            // ✅ Filtro por estado
+            if (!empty($estado)) {
+                $whereClauses[] = "s.estado = :estado";
+                $params[':estado'] = $estado;
+            }
+
+            // ✅ Solo añadimos WHERE si hay al menos un filtro
+            if (!empty($whereClauses)) {
+                $sql .= " WHERE " . implode(' AND ', $whereClauses);
+            }
+
+            $sql .= " ORDER BY s.nombrecompleto ASC";
+
             $stmt = $this->conexion->prepare($sql);
-            $stmt->bindValue(':criterio', '%' . $criterio . '%');
+
+            // ✅ Vinculamos solo si hay parámetros
+            foreach ($params as $key => $value) {
+                $stmt->bindValue($key, $value);
+            }
+
             $stmt->execute();
-            
+
             $socios = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $socios[] = $this->mapRowToSocio($row);
             }
-            
+
+            error_log("✅ listarFiltrado ejecutado correctamente. Resultados: " . count($socios));
             return $socios;
+
         } catch (PDOException $e) {
-            error_log("Error en SocioDAO::findSocios - " . $e->getMessage());
+            error_log("❌ Error en SocioDAO::listarFiltrado - " . $e->getMessage());
             return [];
         }
     }
+
+    /**
+     * Buscar socios por DNI o nombre (para AJAX)
+     */
+    public function findSocios(string $criterio): array {
+        try {
+            error_log("=== DEBUG findSocios ===");
+            error_log("Criterio recibido: " . $criterio);
+
+            $sql = "SELECT s.*, ts.nombretipo, pm.nombreplan, p.nombreprofesion 
+                    FROM socio s
+                    LEFT JOIN tiposocio ts ON s.idtiposocio = ts.idtiposocio
+                    LEFT JOIN planmembresia pm ON s.idplan = pm.idplan
+                    LEFT JOIN profesion p ON s.idprofesion = p.idprofesion
+                    WHERE s.dni LIKE :dni OR s.nombrecompleto LIKE :nombre
+                    ORDER BY s.nombrecompleto ASC";
+
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindValue(':dni', '%' . $criterio . '%', PDO::PARAM_STR);
+            $stmt->bindValue(':nombre', '%' . $criterio . '%', PDO::PARAM_STR);
+            $stmt->execute();
+
+            $socios = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $socios[] = $this->mapRowToSocio($row);
+            }
+
+            error_log("findSocios devolvió " . count($socios) . " resultados.");
+
+            return $socios;
+
+        } catch (PDOException $e) {
+            error_log("❌ Error en SocioDAO::findSocios - " . $e->getMessage());
+            return [];
+        }
+    }
+
 
     /**
      * Verificar si un DNI ya existe
@@ -274,6 +338,23 @@ class SocioDAO {
         }
     }
 
+    /**
+     * Reactiva a un socio (cambia su estado a Activo)
+     */
+    public function reactivar(int $idsocio): bool {
+        try {
+            // Cambiamos el estado de 'Inactivo' a 'Activo'
+            $sql = "UPDATE socio SET estado = 'Activo' WHERE idsocio = :idsocio";
+            
+            $stmt = $this->conexion->prepare($sql);
+            $stmt->bindValue(':idsocio', $idsocio, PDO::PARAM_INT);
+            
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error en SocioDAO::reactivar - " . $e->getMessage());
+            return false;
+        }
+    }
     /**
      * Mapear fila de BD a objeto Socio
      */

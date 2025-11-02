@@ -115,14 +115,29 @@ if (isset($_SESSION['idadmin'])) {
             <form action="<?php echo BASE_URL; ?>/index.php?modulo=seguridad&accion=procesarLogin" method="POST" id="formLogin">
                 <div class="form-group">
                     <label for="usuario">Usuario</label>
-                    <input type="text" id="usuario" name="usuario" class="form-control" required autofocus placeholder="Ingrese su usuario">
-                </div>
-                
+                    <input 
+                        type="text" 
+                        id="usuario" 
+                        name="usuario" 
+                        class="form-control" 
+                        required 
+                        autofocus 
+                        placeholder="Ingrese su usuario"
+                        autocomplete="username"
+                    >
+                </div>             
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="password" id="password" name="password" class="form-control" required placeholder="Ingrese su contraseña">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-control" 
+                        required 
+                        placeholder="Ingrese su contraseña"
+                        autocomplete="current-password">
                 </div>
-                
+
                 <button type="submit" class="btn btn-primary btn-login">Iniciar Sesión</button>
             </form>
             
