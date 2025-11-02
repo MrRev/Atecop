@@ -28,20 +28,44 @@ require_once __DIR__ . '/../../layouts/header.php';
             <div class="icono-reporte">📅</div>
             <h3>Próximos Vencimientos</h3>
             <p>Socios con vencimientos en los próximos días</p>
-            <form method="get" action="index.php" class="form-inline">
+            <!-- Cambiado a botones que construyen la URL con JS para evitar problemas con handlers globales de submit -->
+            <div class="form-inline">
                 <input type="hidden" name="modulo" value="reportes">
-                <!-- CORRECCIÓN: 'accion=vencimientos' -->
                 <input type="hidden" name="accion" value="vencimientos">
                 <label>Días: 
-                    <input type="number" name="dias" value="30" min="1" max="365" class="input-pequeno">
+                    <input type="number" id="dias_vencimientos" name="dias" value="30" min="1" max="365" class="input-pequeno">
                 </label>
                 <div class="botones-reporte">
-                    <button type="submit" class="btn btn-secundario">Ver HTML</button>
-                    <!-- Los 'formaction' ahora incluyen la ruta completa Y el formato -->
-                    <button type="submit" formaction="index.php?modulo=reportes&accion=vencimientos&formato=pdf" class="btn btn-primario">PDF</button>
-                    <button type="submit" formaction="index.php?modulo=reportes&accion=vencimientos&formato=excel" class="btn btn-primario">Excel</button>
+                    <button type="button" id="btn_venc_html" class="btn btn-secundario">Ver HTML</button>
+                    <button type="button" id="btn_venc_pdf" class="btn btn-primario">PDF</button>
+                    <button type="button" id="btn_venc_excel" class="btn btn-primario">Excel</button>
                 </div>
-            </form>
+            </div>
+            <script>
+                (function(){
+                    const inputDias = document.getElementById('dias_vencimientos');
+                    const btnHtml = document.getElementById('btn_venc_html');
+                    const btnPdf = document.getElementById('btn_venc_pdf');
+                    const btnExcel = document.getElementById('btn_venc_excel');
+
+                    function buildUrl(formato) {
+                        const dias = encodeURIComponent(inputDias.value || '30');
+                        let url = 'index.php?modulo=reportes&accion=vencimientos&dias=' + dias;
+                        if (formato) url += '&formato=' + formato;
+                        return url;
+                    }
+
+                    btnHtml.addEventListener('click', function(){
+                        window.location.href = buildUrl();
+                    });
+                    btnPdf.addEventListener('click', function(){
+                        window.location.href = buildUrl('pdf');
+                    });
+                    btnExcel.addEventListener('click', function(){
+                        window.location.href = buildUrl('excel');
+                    });
+                })();
+            </script>
         </div>
 
         <!-- Reporte 3: Detalle de Socio -->
