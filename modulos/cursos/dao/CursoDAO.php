@@ -119,7 +119,7 @@ class CursoDAO {
      */
     public function listarCursos($filtros = []) {
         try {
-            $sql = "SELECT c.*, p.nombrecompleto as nombre_ponente,
+            $sql = "SELECT c.*, p.nombrecompleto as nombreponente,
                     (SELECT COUNT(*) FROM cursoinscrito ci WHERE ci.idcurso = c.idcurso) as inscritos
                     FROM curso c
                     LEFT JOIN ponente p ON c.idponente = p.idponente

@@ -20,3 +20,30 @@
 [2025-11-01 21:29:07] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity"]
 [2025-11-01 21:29:36] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","success"]
 [2025-11-01 21:29:43] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","success"]
+[2025-11-03 14:05:10] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje"]
+[2025-11-03 14:07:34] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje"]
+[2025-11-03 14:09:33] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje"]
+[2025-11-03 14:09:34] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje"]
+[2025-11-03 14:09:35] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje"]
+[2025-11-03 14:09:35] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje"]
+[2025-11-03 14:19:47] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje","error_reporte"]
+[2025-11-03 14:20:05] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje","error_reporte"]
+[2025-11-03 14:20:19] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","mensaje","error_reporte"]
+[2025-11-03 14:24:16] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity"]
+[2025-11-03 14:28:03] ControladorUsuario::guardar - POST: {"dni":"72189592","nombreusuario":"mauro_pinco","email":"mimi@atecop.com","telefono":"987654321","password":"12345","direccion":"Av. Los Ingenieros 123, Lima","rol":"administrador","idsocio":"","estado":"Activo"}
+[2025-11-03 14:28:05] UsuarioDAO::create - Params: {":dni":"72189592",":nombrecompleto":"MAURO ESTEFANO LAZARO PINCO",":nombreusuario":"mauro_pinco",":email":"mimi@atecop.com",":telefono":"987654321",":clavehash":"$2y$10$kfqhb3keMxklC\/li0Etpqu4HQwVpFz948PkNQJK4dilaOR6pZ.osW",":direccion":"Av. Los Ingenieros 123, Lima",":rol":"administrador",":idsocio":null,":estado":"Activo"}
+[2025-11-03 14:28:05] ERROR - ControladorUsuario::guardar - Error al procesar la operación
+[2025-11-03 14:30:20] ControladorUsuario::guardar - POST: {"dni":"72189592","nombreusuario":"mauro_pinco","email":"mimi@atecop.com","telefono":"987654321","password":"12345","direccion":"Av. Los Ingenieros 123, Lima","rol":"administrador","idsocio":"","estado":"Activo"}
+[2025-11-03 14:30:21] UsuarioDAO::create - Params: {":dni":"72189592",":nombrecompleto":"MAURO ESTEFANO LAZARO PINCO",":nombreusuario":"mauro_pinco",":email":"mimi@atecop.com",":telefono":"987654321",":clavehash":"$2y$10$L0i48B6VIoSAJRQJwFXgMurzXFWfi3u7XcOwBiQkKKdKW41Xdn99u",":direccion":"Av. Los Ingenieros 123, Lima",":rol":"administrador",":idsocio":null,":estado":"Activo"}
+[2025-11-03 14:30:21] Error en UsuarioDAO::create - SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'mimi@atecop.com' for key 'email'
+[2025-11-03 14:30:21] ERROR - ControladorUsuario::guardar - Error al procesar la operación
+[2025-11-03 14:30:59] ControladorUsuario::guardar - POST: {"dni":"72189592","nombreusuario":"mauro_pinco","email":"mimilolo@atecop.com","telefono":"987654321","password":"123","direccion":"Av. Los Ingenieros 123, Lima","rol":"administrador","idsocio":"","estado":"Activo"}
+[2025-11-03 14:31:00] UsuarioDAO::create - Params: {":dni":"72189592",":nombrecompleto":"MAURO ESTEFANO LAZARO PINCO",":nombreusuario":"mauro_pinco",":email":"mimilolo@atecop.com",":telefono":"987654321",":clavehash":"$2y$10$av0TY6kvSVW2mAgKTRuBjOvVoKLfozB1Cu4CrUFoyQCdo49j.tEOC",":direccion":"Av. Los Ingenieros 123, Lima",":rol":"administrador",":idsocio":null,":estado":"Activo"}
+[2025-11-03 14:31:00] UsuarioDAO::create - Éxito
+[2025-11-03 14:31:00] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","success"]
+[2025-11-03 14:31:30] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity"]
+[2025-11-03 14:40:43] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity"]
+[2025-11-03 14:40:55] ControladorUsuario::guardar - POST: {"idusuario":"8","dni":"72189592","nombreusuario":"mauro_pinco","email":"mimilolo@atecop.com","telefono":"987654321","password":"12345","direccion":"Av. Los Ingenieros 123, Lima","rol":"administrador","idsocio":"","estado":"Activo"}
+[2025-11-03 14:40:55] ControladorUsuario::listar called. _SESSION keys: ["idadmin","usuario","nombrecompleto","login_time","last_activity","success"]
+[2025-11-03 14:41:19] ControladorUsuario::listar called. _SESSION keys: ["idadmin","idusuario","usuario","nombrecompleto","login_time","last_activity"]
+[2025-11-03 14:41:22] ControladorUsuario::listar called. _SESSION keys: ["idadmin","idusuario","usuario","nombrecompleto","login_time","last_activity"]

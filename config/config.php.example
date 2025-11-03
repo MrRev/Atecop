@@ -1,0 +1,30 @@
+<?php
+// Archivo de ejemplo de configuración para ATECOP
+// Copiar a config/config.php y rellenar valores sensibles (no subir al repositorio).
+
+// Base de datos
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'atecop_db');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+
+define('DB_CHARSET', 'utf8mb4');
+
+// URL base (ajusta según tu entorno)
+define('BASE_URL', 'http://localhost/Atecop');
+
+// Rutas públicas (URLs)
+// Ajusta si tu aplicación está en un subdirectorio o dominio distinto
+define('PUBLIC_URL', BASE_URL . '/public');
+define('CSS_URL', PUBLIC_URL . '/css');
+define('JS_URL', PUBLIC_URL . '/js');
+define('IMG_URL', PUBLIC_URL . '/img');
+define('UPLOADS_URL', PUBLIC_URL . '/uploads');
+
+// API Perú Dev (opcional, para validación de DNI/RUC)
+define('API_PERUDEV_KEY', 'TU_API_KEY_AQUI');
+
+// Otras configuraciones
+// define('SOME_SETTING', 'valor');
+
+// NOTA: Este archivo contiene valores de ejemplo. No subir credenciales reales al repositorio.

@@ -18,11 +18,13 @@ class Usuario {
     private $estado;
     private $fechacreacion;
     private $fechamodificacion;
+    private $nombre_socio;
 
     // Getters
     public function getIdusuario() { return $this->idusuario; }
     public function getDni() { return $this->dni; }
     public function getNombrecompleto() { return $this->nombrecompleto; }
+    public function getNombreSocio() { return $this->nombre_socio; }
     public function getNombreusuario() { return $this->nombreusuario; }
     public function getEmail() { return $this->email; }
     public function getTelefono() { return $this->telefono; }
@@ -75,10 +77,11 @@ class Usuario {
         $this->telefono = $telefono;
     }
 
-    public function setClavehash($password) {
-        if (!empty($password)) {
-            $this->clavehash = password_hash($password, PASSWORD_DEFAULT);
+    public function setClavehash($clavehash) {
+        if (empty($clavehash)) {
+            throw new Exception('La contraseña es requerida');
         }
+        $this->clavehash = $clavehash;
     }
 
     public function setDireccion($direccion) {
@@ -119,5 +122,10 @@ class Usuario {
             return strtolower($primer_nombre . '_' . $primer_apellido);
         }
         throw new Exception('El nombre completo debe tener al menos nombre y apellido');
+    }
+
+    // Setter para nombre_socio
+    public function setNombreSocio($nombre_socio) {
+        $this->nombre_socio = $nombre_socio;
     }
 }

@@ -19,6 +19,20 @@ class UsuarioDAO {
      */
     public function create(Usuario $usuario) {
         try {
+            // Validación de campos requeridos
+            if (empty($usuario->getDni())) {
+                throw new Exception("El DNI es requerido");
+            }
+            if (empty($usuario->getNombrecompleto())) {
+                throw new Exception("El nombre completo es requerido");
+            }
+            if (empty($usuario->getNombreusuario())) {
+                throw new Exception("El nombre de usuario es requerido");
+            }
+            if (empty($usuario->getClavehash())) {
+                throw new Exception("La contraseña es requerida");
+            }
+
             $sql = "INSERT INTO usuario (dni, nombrecompleto, nombreusuario, email, telefono, 
                     clavehash, direccion, rol, idsocio, estado) 
                     VALUES (:dni, :nombrecompleto, :nombreusuario, :email, :telefono,
@@ -30,19 +44,38 @@ class UsuarioDAO {
                 ':dni' => $usuario->getDni(),
                 ':nombrecompleto' => $usuario->getNombrecompleto(),
                 ':nombreusuario' => $usuario->getNombreusuario(),
-                ':email' => $usuario->getEmail(),
-                ':telefono' => $usuario->getTelefono(),
+                ':email' => $usuario->getEmail() ?: null,
+                ':telefono' => $usuario->getTelefono() ?: null,
                 ':clavehash' => $usuario->getClavehash(),
-                ':direccion' => $usuario->getDireccion(),
-                ':rol' => $usuario->getRol(),
-                ':idsocio' => $usuario->getIdsocio(),
-                ':estado' => $usuario->getEstado()
+                ':direccion' => $usuario->getDireccion() ?: null,
+                ':rol' => $usuario->getRol() ?: 'administrador',
+                ':idsocio' => $usuario->getIdsocio() ?: null,
+                ':estado' => $usuario->getEstado() ?: 'Activo'
             ];
-            
-            return $stmt->execute($params);
+
+            error_log("DEBUG - UsuarioDAO::create - Params: " . json_encode($params));
+            // Also write to debug log for easier debugging
+            $logfile = __DIR__ . '/../../../logs/debug_usuario.log';
+            $logmsg = '[' . date('Y-m-d H:i:s') . '] UsuarioDAO::create - Params: ' . json_encode($params) . PHP_EOL;
+            @file_put_contents($logfile, $logmsg, FILE_APPEND);
+
+            if (!$stmt->execute($params)) {
+                $error = $stmt->errorInfo();
+                $errMsg = "ERROR - UsuarioDAO::create - SQL Error: " . json_encode($error);
+                error_log($errMsg);
+                @file_put_contents($logfile, '[' . date('Y-m-d H:i:s') . '] ' . $errMsg . PHP_EOL, FILE_APPEND);
+                throw new Exception("Error al ejecutar la consulta: " . ($error[2] ?? 'Error desconocido'));
+            }
+
+            @file_put_contents($logfile, '[' . date('Y-m-d H:i:s') . '] UsuarioDAO::create - Éxito' . PHP_EOL, FILE_APPEND);
+            return true;
             
         } catch (PDOException $e) {
-            error_log("Error en UsuarioDAO::create - " . $e->getMessage());
+            $msg = "Error en UsuarioDAO::create - " . $e->getMessage();
+            error_log($msg);
+            // Escribir también en el log de debug para traza completa
+            $logfile = __DIR__ . '/../../../logs/debug_usuario.log';
+            @file_put_contents($logfile, '[' . date('Y-m-d H:i:s') . '] ' . $msg . PHP_EOL, FILE_APPEND);
             throw new Exception($this->getMensajeError($e));
         }
     }
@@ -327,7 +360,7 @@ class UsuarioDAO {
         $usuario->setEstado($row['estado']);
         // Extras
         if (isset($row['nombre_socio'])) {
-            $usuario->nombre_socio = $row['nombre_socio'];
+            $usuario->setNombreSocio($row['nombre_socio']);
         }
     }
     

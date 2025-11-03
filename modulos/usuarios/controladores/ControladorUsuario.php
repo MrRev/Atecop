@@ -111,12 +111,19 @@ class ControladorUsuario {
             header('Location: index.php?modulo=usuarios&accion=listar');
             return;
         }
+
+    error_log("DEBUG - ControladorUsuario::guardar - POST data: " . json_encode($_POST));
+    // Also append to debug file so we can see sequence in same log
+    $debugFile = __DIR__ . '/../../../logs/debug_usuario.log';
+    @file_put_contents($debugFile, '[' . date('Y-m-d H:i:s') . '] ControladorUsuario::guardar - POST: ' . json_encode($_POST) . PHP_EOL, FILE_APPEND);
         
         try {
             $usuario = new Usuario();
             
             // En actualización
             if (!empty($_POST['idusuario'])) {
+                error_log("DEBUG - ControladorUsuario::guardar - Actualizando usuario existente: " . $_POST['idusuario']);
+                
                 $usuario_actual = $this->usuarioDAO->read((int)$_POST['idusuario']);
                 if (!$usuario_actual) {
                     throw new Exception('Usuario no encontrado');
@@ -144,8 +151,10 @@ class ControladorUsuario {
             
             // Campos editables
             if (!empty($_POST['nombreusuario'])) {
+                error_log("DEBUG - ControladorUsuario::guardar - Usando nombre de usuario proporcionado: " . $_POST['nombreusuario']);
                 $usuario->setNombreusuario($_POST['nombreusuario']);
             } else {
+                error_log("DEBUG - ControladorUsuario::guardar - Generando nombre de usuario automáticamente");
                 $usuario->setNombrecompleto($usuario->getNombrecompleto() ?? $resultado['data']['nombre']);
                 $usuario->setNombreusuario($usuario->generarNombreUsuario());
             }
@@ -162,24 +171,35 @@ class ControladorUsuario {
                 if (empty($_POST['password'])) {
                     throw new Exception('La contraseña es requerida para nuevos usuarios');
                 }
-                $usuario->setClavehash($_POST['password']);
+                error_log("DEBUG - ControladorUsuario::guardar - Hasheando contraseña");
+                $usuario->setClavehash(password_hash($_POST['password'], PASSWORD_DEFAULT));
             }
             
             // Crear o actualizar
-            if ($usuario->getIdusuario()) {
-                $resultado = $this->usuarioDAO->update($usuario);
-                $mensaje = 'Usuario actualizado correctamente';
-            } else {
-                $resultado = $this->usuarioDAO->create($usuario);
-                $mensaje = 'Usuario creado correctamente';
-            }
-            
-            if ($resultado) {
-                $_SESSION['success'] = $mensaje;
-                header('Location: index.php?modulo=usuarios&accion=listar');
-                exit;
-            } else {
-                throw new Exception('Error al guardar el usuario');
+            try {
+                error_log("DEBUG - ControladorUsuario::guardar - Intentando " . 
+                         ($usuario->getIdusuario() ? "actualizar" : "crear") . " usuario");
+                
+                if ($usuario->getIdusuario()) {
+                    $resultado = $this->usuarioDAO->update($usuario);
+                    $mensaje = 'Usuario actualizado correctamente';
+                } else {
+                    $resultado = $this->usuarioDAO->create($usuario);
+                    $mensaje = 'Usuario creado correctamente';
+                }
+                
+                if ($resultado) {
+                    $_SESSION['success'] = $mensaje;
+                    header('Location: index.php?modulo=usuarios&accion=listar');
+                    exit;
+                } else {
+                    throw new Exception('Error al guardar el usuario');
+                }
+            } catch (Exception $e) {
+                $err = "ERROR - ControladorUsuario::guardar - " . $e->getMessage();
+                error_log($err);
+                @file_put_contents($debugFile, '[' . date('Y-m-d H:i:s') . '] ' . $err . PHP_EOL, FILE_APPEND);
+                throw $e;
             }
             
         } catch (Exception $e) {

@@ -47,24 +47,44 @@ class ControladorLogin {
         try {
             // Buscar administrador
             $admin = $this->adminDAO->findByUsuario($usuario);
-            
-            if ($admin === null) {
-                $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
-                header('Location: ' . BASE_URL . '/index.php?modulo=seguridad&accion=login');
-                exit;
+
+            if ($admin !== null) {
+                // Verificar contraseña
+                if (!$admin->verificarPassword($password)) {
+                    $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
+                    header('Location: ' . BASE_URL . '/index.php?modulo=seguridad&accion=login');
+                    exit;
+                }
+
+                // Login exitoso - Crear sesión para administrador
+                $_SESSION['idadmin'] = $admin->getIdAdmin();
+                $_SESSION['usuario'] = $admin->getUsuario();
+                $_SESSION['nombrecompleto'] = $admin->getNombreCompleto();
+            } else {
+                // Intentar fallback a tabla 'usuario' (todos los usuarios son administradores por ahora)
+                require_once __DIR__ . '/../../usuarios/dao/UsuarioDAO.php';
+                $usuarioDAO = new UsuarioDAO();
+                $user = $usuarioDAO->findByUsuario($usuario);
+
+                if ($user === null) {
+                    $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
+                    header('Location: ' . BASE_URL . '/index.php?modulo=seguridad&accion=login');
+                    exit;
+                }
+
+                // Verificar contraseña con el hash guardado
+                if (!password_verify($password, $user->getClavehash())) {
+                    $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
+                    header('Location: ' . BASE_URL . '/index.php?modulo=seguridad&accion=login');
+                    exit;
+                }
+
+                // Login exitoso desde tabla usuario: mapear sesión como admin temporalmente
+                $_SESSION['idadmin'] = $user->getIdusuario();
+                $_SESSION['idusuario'] = $user->getIdusuario();
+                $_SESSION['usuario'] = $user->getNombreusuario();
+                $_SESSION['nombrecompleto'] = $user->getNombrecompleto();
             }
-            
-            // Verificar contraseña
-            if (!$admin->verificarPassword($password)) {
-                $_SESSION['error_login'] = 'Usuario o contraseña incorrectos.';
-                header('Location: ' . BASE_URL . '/index.php?modulo=seguridad&accion=login');
-                exit;
-            }
-            
-            // Login exitoso - Crear sesión
-            $_SESSION['idadmin'] = $admin->getIdAdmin();
-            $_SESSION['usuario'] = $admin->getUsuario();
-            $_SESSION['nombrecompleto'] = $admin->getNombreCompleto();
             $_SESSION['login_time'] = time();
             
             // Regenerar ID de sesión por seguridad

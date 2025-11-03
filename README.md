@@ -105,6 +105,21 @@ Coloca los archivos en la carpeta `htdocs` de XAMPP (o el directorio web de tu s
    define('API_PERUDEV_KEY', 'tu_api_key_aqui');
    \`\`\`
 
+### 3.b Archivo de configuración de ejemplo
+
+Se incluye un archivo de ejemplo `config/config.php.example`. No subas credenciales reales al repositorio.
+
+Para crear tu archivo de configuración local copia el ejemplo y edita los valores:
+
+```bash
+cp config/config.php.example config/config.php
+# en Windows PowerShell
+Copy-Item config\config.php.example config\config.php
+```
+
+Rellena `config/config.php` con tus credenciales (DB, API keys, BASE_URL, etc.).
+
+Recuerda que `config/config.php` está en `.gitignore` por motivos de seguridad.
 ### 4. Instalar dependencias
 
 \`\`\`bash
