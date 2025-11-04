@@ -244,6 +244,13 @@ try {
                     $id = $_GET['id'] ?? null;
                     $controlador->gestionarInscripciones($id);
                     break;
+                case 'gestionarInscripciones':
+                    $id = $_GET['id'] ?? null;
+                    $controlador->gestionarInscripciones($id);
+                    break;
+                case 'cambiarEstadoPago':
+                    $controlador->cambiarEstadoPago();
+                    break;
                 case 'inscribir':
                     $controlador->inscribir();
                     break;

@@ -219,6 +219,47 @@ class ControladorCurso {
     }
 
     /**
+     * Cambiar estado de pago (AJAX)
+     * Devuelve JSON: { success: bool, mensaje?: string }
+     */
+    public function cambiarEstadoPago() {
+        header('Content-Type: application/json; charset=utf-8');
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            echo json_encode(['success' => false, 'mensaje' => 'Método no permitido']);
+            exit;
+        }
+
+        $idsocio = filter_input(INPUT_POST, 'idsocio', FILTER_VALIDATE_INT);
+        $idcurso = filter_input(INPUT_POST, 'idcurso', FILTER_VALIDATE_INT);
+        $estado = isset($_POST['estado']) ? trim($_POST['estado']) : null;
+
+        if (!$idsocio || !$idcurso || $estado === null) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'mensaje' => 'Datos incompletos']);
+            exit;
+        }
+
+        try {
+            $resultado = $this->cursoInscritoDAO->updateEstadoPago($idsocio, $idcurso, $estado);
+
+            if ($resultado) {
+                echo json_encode(['success' => true]);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'mensaje' => 'No se pudo actualizar el estado']);
+            }
+        } catch (Exception $e) {
+            error_log("Error en cambiarEstadoPago: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'mensaje' => 'Error del servidor']);
+        }
+
+        exit;
+    }
+
+    /**
      * Exportar la lista de inscritos a XLSX (Microsoft Excel)
      */
     public function exportarInscritos($idcurso = null) {
